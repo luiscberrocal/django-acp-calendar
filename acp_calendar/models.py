@@ -15,3 +15,6 @@ class ACPHoliday(models.Model):
     def __str__(self):
         return '%s %s' % (self.date.strptime('%Y-%m-%d'), self.holiday_type)
 
+    class Meta:
+        ordering = ('date',)
+
