@@ -67,4 +67,27 @@ class ACPHoliday(models.Model):
         day_generator = (start_date + timedelta(x + 1) for x in range((end_date - start_date).days))
         return day_generator
 
+    @staticmethod
+    def week_end_days(start_date, end_date):
+        day_generator = ACPHoliday.days_in_range_generator(start_date, end_date)
+        week_end_days = sum(1 for day in day_generator if day.weekday() >= 5)
+        return week_end_days
 
+    @staticmethod
+    def working_delta(start_date, working_days):
+        first_guess = working_days + working_days/5*2 +4
+        end_date = start_date + timedelta(days=first_guess)
+        holidays = ACPHoliday.objects.filter(date__gte=start_date, date__lte=end_date)
+        holiday_list = list()
+        for holiday in holidays:
+            holiday_list.append(holiday.date)
+        not_completed = True
+        end_date = start_date
+        count = 0
+        while not_completed:
+            if end_date.weekday() < 5 and end_date not in holiday_list:
+                count += 1
+            if working_days == count:
+                break
+            end_date = end_date + timedelta(days=1)
+        return end_date
