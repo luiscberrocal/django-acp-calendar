@@ -57,6 +57,15 @@ Does the code actually work?
     (myenv) $ pip install -r requirements-test.txt
     (myenv) $ python runtests.py
 
+Builds
+---------
+
+We are using Travis for continuos integration https://travis-ci.org/luiscberrocal/django-acp-calendar/builds
+
+For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/django-acp-calendar
+
+
+
 Credits
 ---------
 
