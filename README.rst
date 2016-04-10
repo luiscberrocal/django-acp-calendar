@@ -39,6 +39,8 @@ To get the working days pfor the Panama Canal between january 1st to january 31s
 
 ::
 
+     import acp_calendar
+
      start_date = datetime.date(2016, 1,1)
      end_date = datetime.date(2016,1,31)
      working_days = ACPHoliday.get_working_days(start_date, end_date)
@@ -54,6 +56,15 @@ Does the code actually work?
     source <YOURVIRTUALENV>/bin/activate
     (myenv) $ pip install -r requirements-test.txt
     (myenv) $ python runtests.py
+
+Builds
+---------
+
+We are using Travis for continuos integration https://travis-ci.org/luiscberrocal/django-acp-calendar/builds
+
+For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/django-acp-calendar
+
+
 
 Credits
 ---------
