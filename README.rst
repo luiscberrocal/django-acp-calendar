@@ -39,6 +39,8 @@ To get the working days pfor the Panama Canal between january 1st to january 31s
 
 ::
 
+     import acp_calendar
+
      start_date = datetime.date(2016, 1,1)
      end_date = datetime.date(2016,1,31)
      working_days = ACPHoliday.get_working_days(start_date, end_date)
