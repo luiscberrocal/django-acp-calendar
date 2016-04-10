@@ -5,7 +5,7 @@ ACP-Calendar
 .. image:: https://badge.fury.io/py/acp-calendar.png
     :target: https://badge.fury.io/py/acp-calendar
 
-.. image:: https://travis-ci.org/luiscberrocal/acp-calendar.png?branch=master
+.. image:: https://api.travis-ci.org/luiscberrocal/django-acp-calendar.svg?branch=master
     :target: https://travis-ci.org/luiscberrocal/acp-calendar
 
 Calendar and date management for the Panama Canal
@@ -36,6 +36,7 @@ To get the working days pfor the Panama Canal between january 1st to january 31s
      start_date = datetime.date(2016, 1,1)
      end_date = datetime.date(2016,1,31)
      working_days = ACPHoliday.get_working_days(start_date, end_date)
+
 
 Running Tests
 --------------
