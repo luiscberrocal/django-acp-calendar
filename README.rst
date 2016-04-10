@@ -5,8 +5,14 @@ ACP-Calendar
 .. image:: https://badge.fury.io/py/acp-calendar.png
     :target: https://badge.fury.io/py/acp-calendar
 
+
 .. image:: https://api.travis-ci.org/luiscberrocal/django-acp-calendar.svg?branch=master
     :target: https://travis-ci.org/luiscberrocal/acp-calendar
+
+
+.. image:: https://coveralls.io/repos/github/luiscberrocal/django-acp-calendar/badge.svg?branch=master
+    :target: https://coveralls.io/github/luiscberrocal/django-acp-calendar?branch=master
+
 
 Calendar and date management for the Panama Canal
 
