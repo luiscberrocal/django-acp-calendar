@@ -1,7 +1,30 @@
 # -*- coding: utf-8 -*-
-from datetime import timedelta
+from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
+
+class FiscalYear(object):
+
+    def __init__(self, year, **kwargs):
+        self.year = year
+        self.start_date = date(year-1, 10, 1)
+        self.end_date = date(year, 9, 30)
+        self.fy_format = {'display': kwargs.get('display', 'FY%s'),
+                          'length': kwargs.get('length', 2)}
+
+    def __str__(self):
+        return self.fy_format['display'] % str(self.year)[self.fy_format['length']:]
+
+    def create_from_date(cdate, **kwargs):
+        if isinstance(cdate, datetime):
+            cdate = cdate.date()
+        start_of_fy = date(cdate.year, 10, 1)
+        if cdate >= start_of_fy:
+            year = cdate.year + 1
+        else:
+            year = cdate.year
+        return FiscalYear(year, **kwargs)
+
 
 class HolidayType(models.Model):
     name = models.CharField(_('Holiday name'), max_length=60)
