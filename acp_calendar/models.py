@@ -45,6 +45,8 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def validate_dates(start_date, end_date):
+        if start_date > end_date:
+            raise ValueError(_('Start date cannot occur after end date'))
         last_holiday = ACPHoliday.objects.all().last()
         if end_date > last_holiday.date:
             raise ValueError(_('End date exceed the last registered holiday'))
@@ -75,6 +77,7 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def working_delta(start_date, working_days):
+        working_days = int(working_days)
         first_guess = working_days + working_days/5*2 +4
         end_date = start_date + timedelta(days=first_guess)
         holidays = ACPHoliday.objects.filter(date__gte=start_date, date__lte=end_date)

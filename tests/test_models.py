@@ -78,6 +78,15 @@ class TestACPHoliday(TestCase):
         working_days = ACPHoliday.get_working_days(start_date, end_date)
         self.assertEqual(0, working_days)
 
+    def test_get_working_days_wrong_dates(self):
+        start_date = datetime.date(2016, 1, 5)
+        end_date = datetime.date(2016, 1, 2)
+        try:
+            working_days = ACPHoliday.get_working_days(start_date, end_date)
+            self.fail('Did not throw Value error')
+        except ValueError as e:
+            self.assertEqual('Start date cannot occur after end date', str(e))
+
     def test_validate_dates_last_holiday(self):
         first_holiday = ACPHoliday.objects.all().first()
         last_holiday = ACPHoliday.objects.all().last()

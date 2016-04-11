@@ -64,6 +64,21 @@ We are using Travis for continuos integration https://travis-ci.org/luiscberroca
 
 For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/django-acp-calendar
 
+::
+
+    python setup.py sdist bdist_wheel
+
+    python setup.py register -r pypitest
+
+    python setup.py sdist upload -r pypitest
+
+ Check https://testpypi.python.org/pypi/acp-calendar/
+
+ ::
+
+    python setup.py register -r pypi
+
+    python setup.py sdist upload -r pypi
 
 
 Credits
