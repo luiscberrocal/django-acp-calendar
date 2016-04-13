@@ -42,7 +42,7 @@ class TestHolidayType(TestCase):
         loaded_holiday_types = len(get_holiday_type_list())
         data = {'name': 'My Holiday'}
         HolidayType.objects.create(**data)
-        self.assertEqual(11, loaded_holiday_types)
+        self.assertEqual(12, loaded_holiday_types)
         self.assertEqual(1 + loaded_holiday_types, HolidayType.objects.count())
 
     def tearDown(self):
@@ -56,7 +56,7 @@ class TestACPHoliday(TestCase):
 
     def test_load_initial(self):
         loaded_holidays = len(get_holiday_type_list())
-        self.assertEqual(11, loaded_holidays)
+        self.assertEqual(12, loaded_holidays)
 
     def test_days_in_range_generator(self):
         start_date = datetime.date(2016, 1,1)
