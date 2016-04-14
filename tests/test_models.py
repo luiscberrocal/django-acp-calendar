@@ -12,7 +12,7 @@ import datetime
 from django.test import TestCase
 
 from acp_calendar import models
-from acp_calendar.initial_data import get_holiday_type_list
+from acp_calendar.initial_data import get_holiday_type_list, get_holidays_list
 from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear
 
 
@@ -55,8 +55,11 @@ class TestACPHoliday(TestCase):
         pass
 
     def test_load_initial(self):
-        loaded_holidays = len(get_holiday_type_list())
-        self.assertEqual(12, loaded_holidays)
+        loaded_holidays = len(get_holidays_list())
+        self.assertEqual(121, ACPHoliday.objects.count())
+        self.assertEqual(datetime.date(2006, 1,9), ACPHoliday.objects.first().date)
+        self.assertEqual(datetime.date(2016, 12,26), ACPHoliday.objects.last().date)
+
 
     def test_days_in_range_generator(self):
         start_date = datetime.date(2016, 1,1)

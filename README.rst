@@ -28,9 +28,33 @@ Install ACP-Calendar::
 
     pip install acp-calendar
 
-Then use it in a project::
+Then use it in a project include the app on your settings file::
 
-    import acp_calendar
+    ########## APP CONFIGURATION
+    DJANGO_APPS = (
+        # Default Django apps:
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.sites',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+
+        # Useful template tags:
+        # 'django.contrib.humanize',
+
+        # Admin panel and documentation:
+        'django.contrib.admin',
+        # 'django.contrib.admindocs',
+    )
+
+    # Apps specific for this project go here.
+    LOCAL_APPS = (
+        'acp_calendar',
+    )
+    # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
+    INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+
 
 Features
 --------
