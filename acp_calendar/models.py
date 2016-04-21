@@ -45,6 +45,15 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def validate_dates(start_date, end_date):
+        """
+        Validates three rules:
+        1. End date is not before start date
+        2. End date cannot occur after oldest holiday in database
+        3. Start date cannot occur before the first holiday in database
+
+        :param start_date: Start date
+        :param end_date: End date
+        """
         if start_date > end_date:
             raise ValueError(_('Start date cannot occur after end date'))
         last_holiday = ACPHoliday.objects.all().last()
@@ -56,6 +65,14 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def get_working_days(start_date, end_date, **kwargs):
+        """
+        Calculates the amount of working day between start date and end date. It will calculate all day that are not
+        saturday or sunday and then substract the holiday in the range if they exist.
+        :param start_date:
+        :param end_date:
+        :param kwargs:
+        :return: Number of working days between the star date and the end date
+        """
         ACPHoliday.validate_dates(start_date, end_date)
         day_generator = ACPHoliday.days_in_range_generator(start_date, end_date)
         holidays_in_range = ACPHoliday.objects.filter(date__gte=start_date, date__lte=end_date).count()

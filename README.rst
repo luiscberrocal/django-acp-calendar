@@ -96,7 +96,9 @@ For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/dj
 
     python setup.py sdist upload -r pypitest
 
- Check https://testpypi.python.org/pypi/acp-calendar/
+
+
+Check https://testpypi.python.org/pypi/acp-calendar/
 
  ::
 
