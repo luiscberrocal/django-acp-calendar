@@ -12,7 +12,7 @@ import datetime
 from django.test import TestCase
 
 from acp_calendar import models
-from acp_calendar.initial_data import get_holiday_type_list
+from acp_calendar.initial_data import get_holiday_type_list, get_holidays_list
 from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear
 
 
@@ -42,7 +42,7 @@ class TestHolidayType(TestCase):
         loaded_holiday_types = len(get_holiday_type_list())
         data = {'name': 'My Holiday'}
         HolidayType.objects.create(**data)
-        self.assertEqual(11, loaded_holiday_types)
+        self.assertEqual(12, loaded_holiday_types)
         self.assertEqual(1 + loaded_holiday_types, HolidayType.objects.count())
 
     def tearDown(self):
@@ -55,8 +55,11 @@ class TestACPHoliday(TestCase):
         pass
 
     def test_load_initial(self):
-        loaded_holidays = len(get_holiday_type_list())
-        self.assertEqual(11, loaded_holidays)
+        loaded_holidays = len(get_holidays_list())
+        self.assertEqual(121, ACPHoliday.objects.count())
+        self.assertEqual(datetime.date(2006, 1,9), ACPHoliday.objects.first().date)
+        self.assertEqual(datetime.date(2016, 12,26), ACPHoliday.objects.last().date)
+
 
     def test_days_in_range_generator(self):
         start_date = datetime.date(2016, 1,1)
@@ -77,6 +80,15 @@ class TestACPHoliday(TestCase):
         end_date = datetime.date(2016,1,2)
         working_days = ACPHoliday.get_working_days(start_date, end_date)
         self.assertEqual(0, working_days)
+
+    def test_get_working_days_wrong_dates(self):
+        start_date = datetime.date(2016, 1, 5)
+        end_date = datetime.date(2016, 1, 2)
+        try:
+            working_days = ACPHoliday.get_working_days(start_date, end_date)
+            self.fail('Did not throw Value error')
+        except ValueError as e:
+            self.assertEqual('Start date cannot occur after end date', str(e))
 
     def test_validate_dates_last_holiday(self):
         first_holiday = ACPHoliday.objects.all().first()
