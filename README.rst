@@ -59,7 +59,7 @@ Then use it in a project include the app on your settings file::
 Features
 --------
 
-To get the working days pfor the Panama Canal between january 1st to january 31st 2016.
+To get the working days for the Panama Canal between january 1st to january 31st 2016.
 
 ::
 

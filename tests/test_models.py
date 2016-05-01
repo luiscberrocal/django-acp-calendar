@@ -8,6 +8,7 @@ test_acp-calendar
 Tests for `acp-calendar` models module.
 """
 import datetime
+from calendar import IllegalMonthError
 
 from django.test import TestCase
 
@@ -121,6 +122,18 @@ class TestACPHoliday(TestCase):
 
         end_date = ACPHoliday.working_delta(start_date, 5)
         self.assertEqual(datetime.date(2016, 1, 11), end_date)
+
+    def test_get_working_days_for_month(self):
+        working_days = ACPHoliday.get_working_days_for_month(2016, 3)
+        self.assertEqual(22, working_days)
+
+    def test_get_working_days_for_month_illegal_month(self):
+        try:
+            working_days = ACPHoliday.get_working_days_for_month(2016, 13)
+            self.assertEqual(22, working_days)
+            self.fail('IllegalMonthError was not thrown')
+        except IllegalMonthError as e:
+            self.assertEqual('bad month number 13; must be 1-12', str(e))
 
     def tearDown(self):
         pass

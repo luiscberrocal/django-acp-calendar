@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from calendar import monthrange
 from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
@@ -66,7 +67,7 @@ class ACPHoliday(models.Model):
     @staticmethod
     def get_working_days(start_date, end_date, **kwargs):
         """
-        Calculates the amount of working day between start date and end date. It will calculate all day that are not
+        Calculates the amount of working days between start date and end date. It will calculate all days that are not
         saturday or sunday and then substract the holiday in the range if they exist.
         :param start_date:
         :param end_date:
@@ -111,3 +112,10 @@ class ACPHoliday(models.Model):
                 break
             end_date = end_date + timedelta(days=1)
         return end_date
+
+    @staticmethod
+    def get_working_days_for_month(year, month):
+        last_day_of_month = monthrange(year, month)[1]
+        start_date = date(year, month, 1)
+        end_date = date(year, month, last_day_of_month)
+        return ACPHoliday.get_working_days(start_date, end_date)
