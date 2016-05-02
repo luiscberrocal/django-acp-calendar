@@ -132,7 +132,7 @@ class TestACPHoliday(TestCase):
             working_days = ACPHoliday.get_working_days_for_month(2016, 13)
             self.assertEqual(22, working_days)
             self.fail('IllegalMonthError was not thrown')
-        except IllegalMonthError as e:
+        except ACPCalendarException as e:
             self.assertEqual('bad month number 13; must be 1-12', str(e))
 
     def tearDown(self):

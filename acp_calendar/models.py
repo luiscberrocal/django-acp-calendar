@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from calendar import monthrange
+from calendar import monthrange, IllegalMonthError
 from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
@@ -54,6 +54,8 @@ class ACPHoliday(models.Model):
         1. End date is not before start date
         2. End date cannot occur after oldest holiday in database
         3. Start date cannot occur before the first holiday in database
+
+        Will raise an ACPCalendarException if one of these rules is broken.
 
         :param start_date: Start date
         :param end_date: End date
@@ -116,6 +118,12 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def working_delta(start_date, working_days):
+        """
+        Calculates the date based on a start date and the number of working days in the future
+        :param start_date: Start date
+        :param working_days: Number of woking days to the date we are interested
+        :return: Date that is n working days from start date.
+        """
         start_date = ACPHoliday.convert_to_date(start_date)
         working_days = int(working_days)
         first_guess = working_days + working_days/5*2 +4
@@ -137,8 +145,11 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def get_working_days_for_month(year, month):
-        last_day_of_month = monthrange(year, month)[1]
-        start_date = date(year, month, 1)
-        end_date = date(year, month, last_day_of_month)
+        try:
+            last_day_of_month = monthrange(year, month)[1]
+            start_date = date(year, month, 1)
+            end_date = date(year, month, last_day_of_month)
 
-        return ACPHoliday.get_working_days(start_date, end_date)
+            return ACPHoliday.get_working_days(start_date, end_date)
+        except IllegalMonthError as e:
+            raise ACPCalendarException(str(e))
