@@ -43,7 +43,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 setup(
     name='acp-calendar',
     version=version,
-    description="""Calendar and date managemente por the Panama Canal""",
+    description="""Calendar and date management por the Panama Canal""",
     long_description=readme + '\n\n' + history,
     author='Luis Carlos Berrocal',
     author_email='luis.berrocal.1942@gmail.com',
@@ -53,6 +53,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
+        'django-jsonview>=0.5.0'
     ],
     license="BSD",
     zip_safe=False,

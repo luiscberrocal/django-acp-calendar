@@ -1,4 +1,3 @@
-=============================
 ACP-Calendar
 =============================
 
@@ -14,7 +13,7 @@ ACP-Calendar
     :target: https://coveralls.io/github/luiscberrocal/django-acp-calendar?branch=master
 
 
-Calendar and date management for the Panama Canal
+Calendar and date management for the Panama Canal.
 
 Documentation
 -------------
@@ -54,6 +53,8 @@ Then use it in a project include the app on your settings file::
     )
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
     INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+
+Add the acp_calendar.urls to your urls file.
 
 
 Features
