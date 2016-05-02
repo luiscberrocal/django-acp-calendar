@@ -37,3 +37,8 @@ class TestViews(TestCase):
         result = {"start_date": "2016-01-01", "end_date": "2016-01-11", "days": '5'}
         response = self.client.get('/api/working-delta/{start_date}/{days}/'.format(**result))
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
+
+    def test_working_month(self):
+        result = {"year": "2016", "month": "3", "days": '22'}
+        response = self.client.get('/api/working-month/{year}/{month}/'.format(**result))
+        self.assertEqual(result, json.loads(response.content.decode('utf-8')))

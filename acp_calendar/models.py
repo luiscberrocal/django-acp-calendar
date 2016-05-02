@@ -4,6 +4,9 @@ from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
+class ACPCalendarException(Exception):
+    pass
+
 class FiscalYear(object):
 
     def __init__(self, year, **kwargs):
@@ -56,13 +59,13 @@ class ACPHoliday(models.Model):
         :param end_date: End date
         """
         if start_date > end_date:
-            raise ValueError(_('Start date cannot occur after end date'))
+            raise ACPCalendarException(_('Start date cannot occur after end date'))
         last_holiday = ACPHoliday.objects.all().last()
         if end_date > last_holiday.date:
-            raise ValueError(_('End date exceed the last registered holiday'))
+            raise ACPCalendarException(_('End date exceed the last registered holiday'))
         first_holiday = ACPHoliday.objects.all().first()
         if start_date < first_holiday.date:
-            raise ValueError(_('Start date precedes the first registered holiday'))
+            raise ACPCalendarException(_('Start date precedes the first registered holiday'))
 
     @staticmethod
     def get_working_days(start_date, end_date, **kwargs):
@@ -74,27 +77,46 @@ class ACPHoliday(models.Model):
         :param kwargs:
         :return: Number of working days between the star date and the end date
         """
+        start_date = ACPHoliday.convert_to_date(start_date)
+        end_date = ACPHoliday.convert_to_date(end_date)
         ACPHoliday.validate_dates(start_date, end_date)
         day_generator = ACPHoliday.days_in_range_generator(start_date, end_date)
         holidays_in_range = ACPHoliday.objects.filter(date__gte=start_date, date__lte=end_date).count()
         working_days = sum(1 for day in day_generator if day.weekday() < 5)
         return working_days - holidays_in_range
 
+    @staticmethod
+    def convert_to_date(study_date):
+        if isinstance(study_date, str):
+            try:
+                date_object = datetime.strptime(study_date, '%Y-%m-%d').date()
+                return date_object
+            except ValueError as e:
+                raise ACPCalendarException(str(e))
+        elif isinstance(study_date, date):
+            return study_date
+        else:
+            raise ACPCalendarException('Dates must be either string or date objects')
 
     @staticmethod
     def days_in_range_generator(start_date, end_date):
+        start_date = ACPHoliday.convert_to_date(start_date)
+        end_date = ACPHoliday.convert_to_date(end_date)
         start_date = start_date - timedelta(1)
         day_generator = (start_date + timedelta(x + 1) for x in range((end_date - start_date).days))
         return day_generator
 
     @staticmethod
     def week_end_days(start_date, end_date):
+        start_date = ACPHoliday.convert_to_date(start_date)
+        end_date = ACPHoliday.convert_to_date(end_date)
         day_generator = ACPHoliday.days_in_range_generator(start_date, end_date)
         week_end_days = sum(1 for day in day_generator if day.weekday() >= 5)
         return week_end_days
 
     @staticmethod
     def working_delta(start_date, working_days):
+        start_date = ACPHoliday.convert_to_date(start_date)
         working_days = int(working_days)
         first_guess = working_days + working_days/5*2 +4
         end_date = start_date + timedelta(days=first_guess)
@@ -118,4 +140,5 @@ class ACPHoliday(models.Model):
         last_day_of_month = monthrange(year, month)[1]
         start_date = date(year, month, 1)
         end_date = date(year, month, last_day_of_month)
+
         return ACPHoliday.get_working_days(start_date, end_date)
