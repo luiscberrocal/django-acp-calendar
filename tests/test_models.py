@@ -8,12 +8,13 @@ test_acp-calendar
 Tests for `acp-calendar` models module.
 """
 import datetime
+from calendar import IllegalMonthError
 
 from django.test import TestCase
 
 from acp_calendar import models
 from acp_calendar.initial_data import get_holiday_type_list, get_holidays_list
-from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear
+from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear, ACPCalendarException
 
 
 class TestFiscalYear(TestCase):
@@ -87,7 +88,7 @@ class TestACPHoliday(TestCase):
         try:
             working_days = ACPHoliday.get_working_days(start_date, end_date)
             self.fail('Did not throw Value error')
-        except ValueError as e:
+        except ACPCalendarException as e:
             self.assertEqual('Start date cannot occur after end date', str(e))
 
     def test_validate_dates_last_holiday(self):
@@ -96,7 +97,7 @@ class TestACPHoliday(TestCase):
         try:
             ACPHoliday.validate_dates(first_holiday.date, last_holiday.date + datetime.timedelta(days=1))
             self.fail('Value error should have been raised')
-        except ValueError as e:
+        except ACPCalendarException as e:
             self.assertEqual('End date exceed the last registered holiday', str(e))
 
     def test_validate_dates_first_holiday(self):
@@ -105,7 +106,7 @@ class TestACPHoliday(TestCase):
         try:
             ACPHoliday.validate_dates(first_holiday.date - datetime.timedelta(days=1), last_holiday.date)
             self.fail('Value error should have been raised')
-        except ValueError as e:
+        except ACPCalendarException as e:
             self.assertEqual('Start date precedes the first registered holiday', str(e))
 
     def test_week_end_days(self):
@@ -121,6 +122,18 @@ class TestACPHoliday(TestCase):
 
         end_date = ACPHoliday.working_delta(start_date, 5)
         self.assertEqual(datetime.date(2016, 1, 11), end_date)
+
+    def test_get_working_days_for_month(self):
+        working_days = ACPHoliday.get_working_days_for_month(2016, 3)
+        self.assertEqual(22, working_days)
+
+    def test_get_working_days_for_month_illegal_month(self):
+        try:
+            working_days = ACPHoliday.get_working_days_for_month(2016, 13)
+            self.assertEqual(22, working_days)
+            self.fail('IllegalMonthError was not thrown')
+        except ACPCalendarException as e:
+            self.assertEqual('bad month number 13; must be 1-12', str(e))
 
     def tearDown(self):
         pass

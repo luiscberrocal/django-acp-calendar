@@ -1,4 +1,3 @@
-=============================
 ACP-Calendar
 =============================
 
@@ -14,7 +13,7 @@ ACP-Calendar
     :target: https://coveralls.io/github/luiscberrocal/django-acp-calendar?branch=master
 
 
-Calendar and date management for the Panama Canal
+Calendar and date management for the Panama Canal.
 
 Documentation
 -------------
@@ -55,11 +54,13 @@ Then use it in a project include the app on your settings file::
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
     INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 
+Add the acp_calendar.urls to your urls file.
+
 
 Features
 --------
 
-To get the working days pfor the Panama Canal between january 1st to january 31st 2016.
+To get the working days for the Panama Canal between january 1st to january 31st 2016.
 
 ::
 
@@ -88,6 +89,10 @@ We are using Travis for continuos integration https://travis-ci.org/luiscberroca
 
 For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/django-acp-calendar
 
+Run bumpversion ::
+
+    $ bumpversion minor
+
 ::
 
     python setup.py sdist bdist_wheel
@@ -96,7 +101,9 @@ For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/dj
 
     python setup.py sdist upload -r pypitest
 
- Check https://testpypi.python.org/pypi/acp-calendar/
+
+
+Check https://testpypi.python.org/pypi/acp-calendar/
 
  ::
 
