@@ -89,6 +89,10 @@ We are using Travis for continuos integration https://travis-ci.org/luiscberroca
 
 For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/django-acp-calendar
 
+Run bumpversion ::
+
+    $ bumpversion minor
+
 ::
 
     python setup.py sdist bdist_wheel
