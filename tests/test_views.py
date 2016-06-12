@@ -2,6 +2,24 @@ import json
 from django.test import TestCase
 
 
+class TestACPHolidayListAPIView(TestCase):
+
+    def test_get(self):
+        response = self.client.get('/api/holiday-list/')
+        data = json.loads(response.content.decode('utf-8'))
+        results = data['results']
+        self.assertEqual(20, len(results))
+        self.assertEqual(122, data['count'])
+        self.assertEqual('2006-01-01', results[0]['date'])
+
+    def test_get_year(self):
+        response = self.client.get('/api/holiday-list/2013/')
+        data = json.loads(response.content.decode('utf-8'))
+        results = data['results']
+        self.assertEqual(11, len(results))
+        self.assertEqual(11, data['count'])
+        self.assertEqual('2013-01-01', results[0]['date'])
+
 class TestViews(TestCase):
 
     def test_get(self):
@@ -16,7 +34,7 @@ class TestViews(TestCase):
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_error_start_date(self):
-        result = {"start_date": "2006-01-07", "end_date": "2006-01-31", "days": '-1',
+        result = {"start_date": "2005-12-31", "end_date": "2006-01-31", "days": '-1',
                   'error': 'Start date precedes the first registered holiday'}
         response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
