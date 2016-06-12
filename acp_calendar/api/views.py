@@ -1,8 +1,21 @@
 from rest_framework import views
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
+from .serializers import ACPHolidaySerializer, StandardResultsSetPagination
 from ..models import ACPHoliday, ACPCalendarException
 
+class ACPHolidayListAPIView(ListAPIView):
+    #queryset = ACPHoliday.objects.all()
+    serializer_class = ACPHolidaySerializer
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        year = self.kwargs.get('year', None)
+        if year:
+            return ACPHoliday.objects.filter(date__year=int(year))
+        else:
+            return ACPHoliday.objects.all()
 
 class CalendarCalculatonsView(views.APIView):
 

@@ -68,7 +68,25 @@ The settings file::
     INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
-Add the acp_calendar.urls to your urls file.
+Add the acp_calendar.urls to your urls file.::
+
+    urlpatterns = [
+        url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
+        url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about'),
+
+        # Django Admin, use {% url 'admin:index' %}
+        url(settings.ADMIN_URL, include(admin.site.urls)),
+
+        # User management
+        url(r'^users/', include('acp_calendar_project.users.urls', namespace='users')),
+        url(r'^calendar/', include('acp_calendar.urls', namespace='calendar')),
+        url(r'^accounts/', include('allauth.urls')),
+
+        # Your stuff: custom urls includes go here
+
+
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 
 Features

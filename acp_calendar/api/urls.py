@@ -8,4 +8,6 @@ urlpatterns = [
         views.CalendarCalculatonsView.as_view(), {'calculation': 'working_delta'},name="working_delta"),
     url(r"^working-month/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$",
         views.CalendarCalculatonsView.as_view(),{'calculation': 'working_month'}, name="working_month"),
+    url(r'^holiday-list/$', views.ACPHolidayListAPIView.as_view(), name='holiday-list'),
+    url(r'^holiday-list/(?P<year>[0-9]{4})/$', views.ACPHolidayListAPIView.as_view(), name='holiday-list-year'),
     ]
