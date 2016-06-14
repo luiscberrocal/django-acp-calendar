@@ -27,34 +27,66 @@ Install ACP-Calendar::
 
     pip install acp-calendar
 
-Then use it in a project include the app on your settings file::
 
-    ########## APP CONFIGURATION
+Open your settings file and include acp_calendar and rest_framework to the THIRD_PARTY_APPS variable on your settings
+file.
+
+The settings file::
+
     DJANGO_APPS = (
-        # Default Django apps:
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.sites',
-        'django.contrib.messages',
-        'django.contrib.staticfiles',
+    # Default Django apps:
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 
-        # Useful template tags:
-        # 'django.contrib.humanize',
+    # Useful template tags:
+    # 'django.contrib.humanize',
 
-        # Admin panel and documentation:
-        'django.contrib.admin',
-        # 'django.contrib.admindocs',
+    # Admin
+    'django.contrib.admin',
+    )
+    THIRD_PARTY_APPS = (
+        'crispy_forms',  # Form layouts
+        'allauth',  # registration
+        'allauth.account',  # registration
+        'allauth.socialaccount',  # registration
+        'rest_framework',
+        'acp_calendar',
     )
 
     # Apps specific for this project go here.
     LOCAL_APPS = (
-        'acp_calendar',
-    )
-    # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-    INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+        'acp_calendar_project.users',  # custom users app
 
-Add the acp_calendar.urls to your urls file.
+        # Your stuff: custom apps go here
+    )
+
+    # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
+    INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+
+Add the acp_calendar.urls to your urls file.::
+
+    urlpatterns = [
+        url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
+        url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about'),
+
+        # Django Admin, use {% url 'admin:index' %}
+        url(settings.ADMIN_URL, include(admin.site.urls)),
+
+        # User management
+        url(r'^users/', include('acp_calendar_project.users.urls', namespace='users')),
+        url(r'^calendar/', include('acp_calendar.urls', namespace='calendar')),
+        url(r'^accounts/', include('allauth.urls')),
+
+        # Your stuff: custom urls includes go here
+
+
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 
 Features
@@ -71,6 +103,16 @@ To get the working days for the Panama Canal between january 1st to january 31st
      working_days = ACPHoliday.get_working_days(start_date, end_date)
 
 
+Virtual Environment
+--------------------
+
+Use virtualenv to manage a virtual environment.
+
+In a Mac use the following command to create the virtual environment::
+
+    python3 /usr/local/lib/python3.4/site-packages/virtualenv.py --no-site-packages acp_calendar_env
+
+
 Running Tests
 --------------
 
@@ -78,7 +120,7 @@ Does the code actually work?
 
 ::
 
-    source <YOURVIRTUALENV>/bin/activate
+    source acp_calendar_env/bin/activate
     (myenv) $ pip install -r requirements-test.txt
     (myenv) $ python runtests.py
 
