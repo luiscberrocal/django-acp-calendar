@@ -9,7 +9,7 @@ class TestACPHolidayListAPIView(TestCase):
         data = json.loads(response.content.decode('utf-8'))
         results = data['results']
         self.assertEqual(20, len(results))
-        self.assertEqual(122, data['count'])
+        self.assertEqual(133, data['count'])
         self.assertEqual('2006-01-01', results[0]['date'])
 
     def test_get_year(self):
@@ -40,7 +40,7 @@ class TestViews(TestCase):
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_error_end_date(self):
-        result = {"start_date": "2016-01-07", "end_date": "2016-12-31", "days": '-1',
+        result = {"start_date": "2017-01-07", "end_date": "2017-12-31", "days": '-1',
                   'error': 'End date exceed the last registered holiday'}
         response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))

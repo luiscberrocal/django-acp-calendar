@@ -31,6 +31,22 @@ def get_holiday_type_list():
 
 
 def get_holidays_list():
+    holidays_17 = [{'date': datetime.strptime('2017-01-02', '%Y-%m-%d'), 'holiday_type': 'Año Nuevo'},
+                   {'date': datetime.strptime('2017-01-09', '%Y-%m-%d'), 'holiday_type': 'Día de los Mártires'},
+                   {'date': datetime.strptime('2017-02-28', '%Y-%m-%d'), 'holiday_type': 'Martes Carnaval'},
+                   {'date': datetime.strptime('2017-04-14', '%Y-%m-%d'), 'holiday_type': 'Viernes Santo'},
+                   {'date': datetime.strptime('2017-05-01', '%Y-%m-%d'), 'holiday_type': 'Día del Trabajador'},
+                   {'date': datetime.strptime('2017-11-03', '%Y-%m-%d'),
+                    'holiday_type': 'Día de la Separación de Panamá de Colombia'},
+                   {'date': datetime.strptime('2017-11-06', '%Y-%m-%d'), 'holiday_type': 'Día de Colón'},
+                   {'date': datetime.strptime('2017-11-10', '%Y-%m-%d'),
+                    'holiday_type': 'Primer Grito de Independencia'},
+                   {'date': datetime.strptime('2017-11-27', '%Y-%m-%d'),
+                    'holiday_type': 'Independencia de Panamá de España'},
+                   {'date': datetime.strptime('2017-12-08', '%Y-%m-%d'), 'holiday_type': 'Día de la Madre'},
+                   {'date': datetime.strptime('2017-12-25', '%Y-%m-%d'), 'holiday_type': 'Navidad'},
+                   ]
+
     holidays_16 = [{'date': datetime.strptime('2016-01-01', '%Y-%m-%d'), 'holiday_type': 'Año Nuevo'},
                    {'date': datetime.strptime('2016-01-08', '%Y-%m-%d'), 'holiday_type': 'Día de los Mártires'},
                    {'date': datetime.strptime('2016-02-09', '%Y-%m-%d'), 'holiday_type': 'Martes Carnaval'},
@@ -215,4 +231,4 @@ def get_holidays_list():
     ]
 
     return (holidays_6 + holidays_7 + holidays_8 + holidays_9 + holidays_10 + holidays_11 + holidays_12 + holidays_13 +
-            holidays_14 + holidays_15 + holidays_16)
+            holidays_14 + holidays_15 + holidays_16 + holidays_17)
