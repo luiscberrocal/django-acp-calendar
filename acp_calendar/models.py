@@ -89,6 +89,11 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def convert_to_date(study_date):
+        """
+        Converts String to date to a date object.
+        :param study_date: date to be processed
+        :return: date object
+        """
         if isinstance(study_date, str):
             try:
                 date_object = datetime.strptime(study_date, '%Y-%m-%d').date()

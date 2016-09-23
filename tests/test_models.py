@@ -57,9 +57,9 @@ class TestACPHoliday(TestCase):
 
     def test_load_initial(self):
         loaded_holidays = len(get_holidays_list())
-        self.assertEqual(122, ACPHoliday.objects.count())
+        self.assertEqual(133, ACPHoliday.objects.count())
         self.assertEqual(datetime.date(2006, 1,1), ACPHoliday.objects.first().date)
-        self.assertEqual(datetime.date(2016, 12,26), ACPHoliday.objects.last().date)
+        self.assertEqual(datetime.date(2017, 12,25), ACPHoliday.objects.last().date)
 
 
     def test_days_in_range_generator(self):
@@ -135,5 +135,13 @@ class TestACPHoliday(TestCase):
         except ACPCalendarException as e:
             self.assertEqual('bad month number 13; must be 1-12', str(e))
 
-    def tearDown(self):
-        pass
+    def test_convert_to_date(self):
+        study_date = ACPHoliday.convert_to_date('2016-07-08')
+        self.assertEqual(datetime.date(2016, 7, 8), study_date)
+
+    def test_convert_to_date_invalid(self):
+        try:
+            study_date = ACPHoliday.convert_to_date(5)
+            self.fail('should throw error for dates must be either string or date objects')
+        except ACPCalendarException as e:
+            self.assertEqual('Dates must be either string or date objects', str(e))
