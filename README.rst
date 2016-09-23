@@ -139,6 +139,9 @@ Run bumpversion ::
 
     $ bumpversion minor
 
+
+Intead of minor you could also use major o patch depending on the level of the release.
+
 ::
 
     python setup.py sdist bdist_wheel
