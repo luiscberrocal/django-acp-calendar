@@ -12,6 +12,10 @@ ACP-Calendar
 .. image:: https://coveralls.io/repos/github/luiscberrocal/django-acp-calendar/badge.svg?branch=master
     :target: https://coveralls.io/github/luiscberrocal/django-acp-calendar?branch=master
 
+.. image:: https://codeclimate.com/github/luiscberrocal/django-acp-calendar/badges/gpa.svg
+   :target: https://codeclimate.com/github/luiscberrocal/django-acp-calendar
+   :alt: Code Climate
+
 
 Calendar and date management for the Panama Canal.
 
