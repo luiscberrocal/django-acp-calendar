@@ -4,20 +4,35 @@
 {% block content %}
 <h2>Calculator</h2>
 <div>
-  Enter date in %Y-%m-%d format. For example for january 5th 2016 type 2016-01-05.
+  Enter date in YYYY-MM-DD format. For example for january 5th 2016 type 2016-01-05.
 </div>
+
 <form action="" method="post">
   {% csrf_token %}
-  {% for field in form %}
-  <div class="fieldWrapper">
-    {{ field.errors }}
-    {{ field.label_tag }} {{ field }}
-    {% if field.help_text %}
-    <p class="help">{{ field.help_text|safe }}</p>
-    {% endif %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        {{ form.start_date.errors }}
+        <label for="{{ form.start_date.id_for_label }}" class="control-label">{{ form.start_date.label }}</label>
+        <input
+          type="text" value="{{ form.start_date.value|date:'Y-m-d'  }}" title=""
+          placeholder="{{ form.start_date.label }}" name="start_date"
+          id="{{ form.start_date.id_for_label }}" class="form-control datepicker">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        {{ form.end_date.errors }}
+        <label for="{{ form.end_date.id_for_label }}" class="control-label">{{ form.end_date.label }}</label>
+        <input
+          type="text" value="{{ form.end_date.value|date:'Y-m-d'  }}" title=""
+          placeholder="{{ form.end_date.label }}" name="end_date"
+          id="{{ form.end_date.id_for_label }}" class="form-control datepicker">
+      </div>
+    </div>
   </div>
-  {% endfor %}
-  <input type="submit" value="Submit"/>
+
+  <input type="submit" value="Calculate"/>
 </form>
 {% if  working_days%}
 <h3>{{ working_days }} working days</h3>
