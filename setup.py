@@ -59,7 +59,7 @@ setup(
     zip_safe=False,
     keywords='acp-calendar',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.9',
