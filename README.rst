@@ -93,6 +93,8 @@ Add the acp_calendar.urls to your urls file.::
 
 
 
+
+
 Features
 --------
 
@@ -105,6 +107,9 @@ To get the working days for the Panama Canal between january 1st to january 31st
      start_date = datetime.date(2016, 1,1)
      end_date = datetime.date(2016,1,31)
      working_days = ACPHoliday.get_working_days(start_date, end_date)
+
+
+To access the calculator go to http://<your_host>:<your_port>/calendar/calculator/
 
 
 Virtual Environment
