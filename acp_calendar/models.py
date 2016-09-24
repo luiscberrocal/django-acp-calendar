@@ -4,8 +4,8 @@ from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
-class ACPCalendarException(Exception):
-    pass
+from .exceptions import ACPCalendarException
+
 
 class FiscalYear(object):
 
@@ -32,6 +32,7 @@ class FiscalYear(object):
 
 class HolidayType(models.Model):
     name = models.CharField(_('Holiday name'), max_length=60)
+    short_name = models.CharField(_('short name'), max_length=60, unique=True)
 
     def __str__(self):
         return self.name

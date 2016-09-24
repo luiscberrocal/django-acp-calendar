@@ -12,7 +12,7 @@ class CalculatorView(View):
         return render(request, 'acp_calendar/calculator.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        calculator_form =  CalculatorForm(request.POST)
+        calculator_form = CalculatorForm(request.POST)
         if calculator_form.is_valid():
             start_date = calculator_form.cleaned_data['start_date']
             end_date = calculator_form.cleaned_data['end_date']
