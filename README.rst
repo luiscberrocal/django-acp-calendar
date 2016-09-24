@@ -17,7 +17,7 @@ ACP-Calendar
    :alt: Code Climate
 
 
-Calendar and date management for the Panama Canal.
+Holiday calendar and date management for the Panama Canal. Includes Panama Canal holidays from 2006 to 2017.
 
 Documentation
 -------------
@@ -140,7 +140,7 @@ Run bumpversion ::
     $ bumpversion minor
 
 
-Intead of minor you could also use major o patch depending on the level of the release.
+Instead of minor you could also use major o patch depending on the level of the release.
 
 ::
 
