@@ -111,6 +111,13 @@ To get the working days for the Panama Canal between january 1st to january 31st
 
 To access the calculator go to http://<your_host>:<your_port>/calendar/calculator/
 
+To use the calculator your base.html must have:
+
+    * A javascript block at the end of the html
+    * jQuery (version 2.2.x)
+    * jQuery ui (version 1.12.x)
+
+
 
 Virtual Environment
 --------------------
