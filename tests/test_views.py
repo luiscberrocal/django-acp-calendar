@@ -20,7 +20,7 @@ class TestACPHolidayListAPIView(TestCase):
         self.assertEqual(11, data['count'])
         self.assertEqual('2013-01-01', results[0]['date'])
 
-class TestViews(TestCase):
+class TestCalendarCalculatonsView(TestCase):
 
     def test_get(self):
         result = {"start_date": "2016-01-01", "end_date": "2016-01-31", "days": '19'}
