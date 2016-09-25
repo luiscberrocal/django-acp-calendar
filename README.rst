@@ -109,15 +109,15 @@ To get the working days for the Panama Canal between january 1st to january 31st
 
 .. code-block:: python
 
-    In [ 3 ]: import datetime
+    In [ 3 ]:  import datetime
 
-    In [ 4 ]:  start_date = datetime.date(2016, 1,1)
+    In [ 4 ]:  start_date = datetime.date(2016, 1,1)
 
-    In [ 5 ]:   end_date = datetime.date(2016,1,31)
+    In [ 5 ]:  end_date = datetime.date(2016,1,31)
 
-    In [ 6 ]:   working_days = ACPHoliday.get_working_days(start_date, end_date)
+    In [ 6 ]:  working_days = ACPHoliday.get_working_days(start_date, end_date)
 
-    In [ 7 ]:   print(working_days)
+    In [ 7 ]:  print(working_days)
     19
 
 Fiscal Year
