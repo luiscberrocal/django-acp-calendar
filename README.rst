@@ -136,9 +136,9 @@ Does the code actually work?
 
 ::
 
-    source acp_calendar_env/bin/activate
-    (myenv) $ pip install -r requirements-test.txt
-    (myenv) $ python runtests.py
+    $ source acp_calendar_env/bin/activate
+    (acp_calendar_env) $ pip install -r requirements-test.txt
+    (acp_calendar_env) $ python runtests.py
 
 Builds
 ---------

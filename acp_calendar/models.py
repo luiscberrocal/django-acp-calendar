@@ -8,8 +8,20 @@ from .exceptions import ACPCalendarException
 
 
 class FiscalYear(object):
+    '''
+    This class represents a Pancama Canal Fiscal year which start on October first
+    of the previous year and ends on September 30th of the current year.
+    For example fiscal year 2016 starts on October 1st, 2015 and ends September 30th
+    2016
+    '''
 
     def __init__(self, year, **kwargs):
+        """
+        Contructor for Fiscal year.
+        :param year: Fiscal year
+        :param kwargs: includes display wich is the template for the str method and
+        length which is also used in the str method
+        """
         self.year = year
         self.start_date = date(year-1, 10, 1)
         self.end_date = date(year, 9, 30)
@@ -19,7 +31,14 @@ class FiscalYear(object):
     def __str__(self):
         return self.fy_format['display'] % str(self.year)[self.fy_format['length']:]
 
+    @staticmethod
     def create_from_date(cdate, **kwargs):
+        """
+        Creates a Fiscal year object for a date
+        :param cdate: Date whitin the fiscal year
+        :param kwargs: Same kwargs as for the contructor
+        :return: a FiscalYear object
+        """
         if isinstance(cdate, datetime):
             cdate = cdate.date()
         start_of_fy = date(cdate.year, 10, 1)
