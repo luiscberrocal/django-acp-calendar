@@ -72,11 +72,14 @@ class TestCalendarCalculationsView(TestCase):
 
 class TestCalulatorView(TestCase):
 
+    version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
+
     def test_get(self):
         url = reverse('calculator')
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
         self.assertTrue(isinstance(response.context[-1]['form'], CalculatorForm))
+        self.assertRegex(response.context['version'], self.version_regex)
 
     def test_post(self):
         data = {'start_date': '2016-01-01', 'end_date': '2016-02-25'}
@@ -84,6 +87,7 @@ class TestCalulatorView(TestCase):
         response = self.client.post(url, data=data)
         self.assertEqual(200, response.status_code)
         self.assertEqual(37, response.context[-1]['working_days'])
+        self.assertRegex(response.context['version'], self.version_regex)
 
     def test_post_wrong_dates(self):
         data = {'start_date': '2016-01-01', 'end_date': '2015-02-25'}
@@ -93,6 +97,16 @@ class TestCalulatorView(TestCase):
         self.assertEqual(None, response.context[-1]['working_days'])
         self.assert_message_count(response, 1)
         self.assert_message_contains(response, 'Start date cannot occur after end date')
+        self.assertRegex(response.context['version'], self.version_regex)
+
+    def test_post_invalid_form(self):
+        data = {'start_date': '2016-01-01', 'end_date': 'hjudas'}
+        url = reverse('calculator')
+        response = self.client.post(url, data=data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(None, response.context[-1]['working_days'])
+        self.assertRegex(response.context['version'], self.version_regex)
+        self.assertEqual('Enter a valid date.', response.context['form'].errors['end_date'][0])
 
 
     def assert_message_count(self, response, expect_num):

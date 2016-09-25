@@ -16,7 +16,7 @@ class CalculatorView(View):
         form = CalculatorForm()
         data = {'form': form,
                 'version': acp_calendar.__version__}
-        return render(request, self.template_name, )
+        return render(request, self.template_name, data)
 
     def post(self, request, *args, **kwargs):
         calculator_form = CalculatorForm(request.POST)
