@@ -1,13 +1,11 @@
 ACP-Calendar
-=============================
+============
 
 .. image:: https://badge.fury.io/py/acp-calendar.png
     :target: https://badge.fury.io/py/acp-calendar
 
-
 .. image:: https://api.travis-ci.org/luiscberrocal/django-acp-calendar.svg?branch=master
     :target: https://travis-ci.org/luiscberrocal/acp-calendar
-
 
 .. image:: https://coveralls.io/repos/github/luiscberrocal/django-acp-calendar/badge.svg?branch=master
     :target: https://coveralls.io/github/luiscberrocal/django-acp-calendar?branch=master
@@ -27,15 +25,22 @@ The full documentation is at https://acp-calendar.readthedocs.org.
 Quickstart
 ----------
 
-Install ACP-Calendar::
+Install ACP-Calendar
 
-    pip install acp-calendar
+.. code-block:: bash
+
+    $ pip install acp-calendar
 
 
-Open your settings file and include acp_calendar and rest_framework to the THIRD_PARTY_APPS variable on your settings
+Open your settings file and include acp_calendar and `rest_framework`_ to the THIRD_PARTY_APPS variable on your settings
 file.
 
-The settings file::
+
+.. _rest_framework: http://www.django-rest-framework.org/
+
+The settings file
+
+.. code-block:: python
 
     DJANGO_APPS = (
     # Default Django apps:
@@ -72,7 +77,9 @@ The settings file::
     INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
-Add the acp_calendar.urls to your urls file.::
+Add the acp_calendar.urls to your urls file.
+
+.. code-block:: python
 
     urlpatterns = [
         url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
@@ -99,48 +106,48 @@ Features
 --------
 
 Holidays
-+++++++++
+++++++++
 
 To get the working days for the Panama Canal between january 1st to january 31st 2016.
 
-::
+.. code-block:: python
 
-    In [3]:  import datetime
+    In [ 3 ]:  import datetime
 
-    In [4]:  start_date = datetime.date(2016, 1,1)
+    In [ 4 ]:  start_date = datetime.date(2016, 1,1)
 
-    In [5]:  end_date = datetime.date(2016,1,31)
+    In [ 5 ]:  end_date = datetime.date(2016,1,31)
 
-    In [6]:  working_days = ACPHoliday.get_working_days(start_date, end_date)
+    In [ 6 ]:  working_days = ACPHoliday.get_working_days(start_date, end_date)
 
-    In [7]:  print(working_days)
+    In [ 7 ]:  print(working_days)
     19
 
 Fiscal Year
-++++++++++++
++++++++++++
 
-::
+.. code-block:: python
 
-    In [1]:  import datetime
+    In [ 1 ]:   import datetime
 
-    In [4]:  from acp_calendar.models import FiscalYear
+    In [ 2 ]:   from acp_calendar.models import FiscalYear
 
-    In [2]:  start_date = datetime.date(2015, 10,1)
+    In [ 3 ]:   start_date = datetime.date(2015, 10,1)
 
-    In [5]:  fiscal_year = FiscalYear.create_from_date(start_date)
+    In [ 4 ]:   fiscal_year = FiscalYear.create_from_date(start_date)
 
-    In [6]:  print(fiscal_year)
+    In [ 5 ]:   print(fiscal_year)
     FY16
 
-    In [7]:  fiscal_year.start_date
-    Out[7]: datetime.date(2015, 10, 1)
+    In [ 6 ]:   fiscal_year.start_date
+    Out[6]: datetime.date(2015, 10, 1)
 
-    In [8]:  fiscal_year.end_date
-    Out[8]: datetime.date(2016, 9, 30)
+    In [ 7 ]:   fiscal_year.end_date
+    Out[7]: datetime.date(2016, 9, 30)
 
 
 Calculator
-++++++++++++
+++++++++++
 
 To access the calculator go to http://<your_host>:<your_port>/calendar/calculator/
 
@@ -155,41 +162,45 @@ To use the calculator your base.html must have:
 
 
 Virtual Environment
---------------------
+-------------------
 
 Use virtualenv to manage a virtual environment.
 
-In a Mac use the following command to create the virtual environment::
+In a Mac use the following command to create the virtual environment.
 
-    python3 /usr/local/lib/python3.4/site-packages/virtualenv.py --no-site-packages acp_calendar_env
+.. code-block:: bash
+
+    $ python3 /usr/local/lib/python3.4/site-packages/virtualenv.py --no-site-packages acp_calendar_env
 
 
 Running Tests
---------------
+-------------
 
 Does the code actually work?
 
-::
+.. code-block:: bash
 
     $ source acp_calendar_env/bin/activate
     (acp_calendar_env) $ pip install -r requirements-test.txt
     (acp_calendar_env) $ python runtests.py
 
 Builds
----------
+------
 
 We are using Travis for continuos integration https://travis-ci.org/luiscberrocal/django-acp-calendar/builds
 
 For coverage we are using coveralls https://coveralls.io/github/luiscberrocal/django-acp-calendar
 
-Run bumpversion ::
+Run bumpversion
+
+.. code-block:: bash
 
     $ bumpversion minor
 
 
 Instead of minor you could also use major o patch depending on the level of the release.
 
-::
+.. code-block:: bash
 
     python setup.py sdist bdist_wheel
 
@@ -201,7 +212,7 @@ Instead of minor you could also use major o patch depending on the level of the 
 
 Check https://testpypi.python.org/pypi/acp-calendar/
 
- ::
+.. code-block:: bash
 
     python setup.py register -r pypi
 
@@ -209,7 +220,7 @@ Check https://testpypi.python.org/pypi/acp-calendar/
 
 
 Credits
----------
+-------
 
 Tools used in rendering this package:
 
