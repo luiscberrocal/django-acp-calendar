@@ -98,18 +98,53 @@ Add the acp_calendar.urls to your urls file.::
 Features
 --------
 
+Holidays
++++++++++
+
 To get the working days for the Panama Canal between january 1st to january 31st 2016.
 
 ::
 
-     import acp_calendar
+    In [3]:  import datetime
 
-     start_date = datetime.date(2016, 1,1)
-     end_date = datetime.date(2016,1,31)
-     working_days = ACPHoliday.get_working_days(start_date, end_date)
+    In [4]:  start_date = datetime.date(2016, 1,1)
 
+    In [5]:  end_date = datetime.date(2016,1,31)
+
+    In [6]:  working_days = ACPHoliday.get_working_days(start_date, end_date)
+
+    In [7]:  print(working_days)
+    19
+
+Fiscal Year
+++++++++++++
+
+::
+
+    In [1]:  import datetime
+
+    In [4]:  from acp_calendar.models import FiscalYear
+
+    In [2]:  start_date = datetime.date(2015, 10,1)
+
+    In [5]:  fiscal_year = FiscalYear.create_from_date(start_date)
+
+    In [6]:  print(fiscal_year)
+    FY16
+
+    In [7]:  fiscal_year.start_date
+    Out[7]: datetime.date(2015, 10, 1)
+
+    In [8]:  fiscal_year.end_date
+    Out[8]: datetime.date(2016, 9, 30)
+
+
+Calculator
+++++++++++++
 
 To access the calculator go to http://<your_host>:<your_port>/calendar/calculator/
+
+.. image:: docs/images/calculator_01.png
 
 To use the calculator your base.html must have:
 
@@ -136,9 +171,9 @@ Does the code actually work?
 
 ::
 
-    source acp_calendar_env/bin/activate
-    (myenv) $ pip install -r requirements-test.txt
-    (myenv) $ python runtests.py
+    $ source acp_calendar_env/bin/activate
+    (acp_calendar_env) $ pip install -r requirements-test.txt
+    (acp_calendar_env) $ python runtests.py
 
 Builds
 ---------

@@ -16,20 +16,19 @@ class Command(BaseCommand):
 
     Year 2006  (11 holidays)
     ----------------------------------------------------------------------
-	[*] año_nuevo                      2006-01-01
-	[-] mártires                       2006-01-09
-	[*] martes_carnaval                2006-02-28
-	[*] viernes_santo                  2006-04-14
-	[*] día_del_trabajo                2006-05-01
+    [*] año_nuevo                      2006-01-01
+    [-] mártires                       2006-01-09
+    [*] martes_carnaval                2006-02-28
+    [*] viernes_santo                  2006-04-14
+    [*] día_del_trabajo                2006-05-01
 
     ...
 
     ======================================================================
     Found 133 in initials
     Found 132 in database
-
-
     '''
+
     def add_arguments(self, parser):
         #parser.add_argument('optional-argument', nargs='?')
         parser.add_argument('--list-initial',

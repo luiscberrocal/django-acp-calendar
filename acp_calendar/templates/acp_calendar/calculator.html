@@ -20,6 +20,8 @@
           id="{{ form.start_date.id_for_label }}" class="form-control datepicker">
       </div>
     </div>
+     </div>
+  <div class="row">
     <div class="col-md-6">
       <div class="form-group">
         {{ form.end_date.errors }}
@@ -30,13 +32,15 @@
           id="{{ form.end_date.id_for_label }}" class="form-control datepicker">
       </div>
     </div>
-  </div>
+    </div>
+
 
   <input class="btn btn-primary" role="button" type="submit" value="{% trans 'Calculate' %}">
 </form>
 {% if  working_days%}
 <h3>{{ working_days }} working days</h3>
 {% endif %}
+<div>Version: {{ version }}</div>
 {% endblock content %}
 {% block javascript %}
 {{ block.super }}
