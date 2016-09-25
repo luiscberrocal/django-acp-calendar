@@ -127,20 +127,20 @@ Fiscal Year
 
     In [ 1 ]:   import datetime
 
-    In [ 4 ]:   from acp_calendar.models import FiscalYear
+    In [ 2 ]:   from acp_calendar.models import FiscalYear
 
-    In [ 2 ]:   start_date = datetime.date(2015, 10,1)
+    In [ 3 ]:   start_date = datetime.date(2015, 10,1)
 
-    In [ 5 ]:   fiscal_year = FiscalYear.create_from_date(start_date)
+    In [ 4 ]:   fiscal_year = FiscalYear.create_from_date(start_date)
 
-    In [ 6 ]:   print(fiscal_year)
+    In [ 5 ]:   print(fiscal_year)
     FY16
 
-    In [ 7 ]:   fiscal_year.start_date
-    Out[7]: datetime.date(2015, 10, 1)
+    In [ 6 ]:   fiscal_year.start_date
+    Out[6]: datetime.date(2015, 10, 1)
 
-    In [ 8 ]:   fiscal_year.end_date
-    Out[8]: datetime.date(2016, 9, 30)
+    In [ 7 ]:   fiscal_year.end_date
+    Out[7]: datetime.date(2016, 9, 30)
 
 
 Calculator
