@@ -29,11 +29,14 @@ Install ACP-Calendar
 
 .. code-block:: bash
 
-    pip install acp-calendar
+    $ pip install acp-calendar
 
 
-Open your settings file and include acp_calendar and rest_framework to the THIRD_PARTY_APPS variable on your settings
+Open your settings file and include acp_calendar and `rest_framework`_ to the THIRD_PARTY_APPS variable on your settings
 file.
+
+
+.. _rest_framework: http://www.django-rest-framework.org/
 
 The settings file
 
@@ -109,9 +112,9 @@ To get the working days for the Panama Canal between january 1st to january 31st
 
 .. code-block:: python
 
-    In [ 3 ]:  import datetime
+    In [ 3 ]:  import datetime
 
-    In [ 4 ]:  start_date = datetime.date(2016, 1,1)
+    In [ 4 ]:  start_date = datetime.date(2016, 1,1)
 
     In [ 5 ]:  end_date = datetime.date(2016,1,31)
 
