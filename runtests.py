@@ -20,7 +20,11 @@ try:
             "acp_calendar",
         ],
         SITE_ID=1,
-        MIDDLEWARE_CLASSES=(),
+        MIDDLEWARE_CLASSES=(
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ),
+        MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage',
     )
 
     try:
