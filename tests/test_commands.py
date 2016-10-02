@@ -19,6 +19,8 @@ from .utils import add_date_to_filename
 
 class TestACPHolidayCommand(TestCase):
 
+    clean_output = True
+
 
     def test_list_initial(self):
         content = StringIO()
@@ -49,6 +51,10 @@ class TestACPHolidayCommand(TestCase):
         dated_filename = add_date_to_filename(filename)
         call_command('acp_holidays', export_filename=dated_filename, stdout=content)
         self.assertTrue(os.path.exists(dated_filename))
+        if self.clean_output:
+            os.remove(dated_filename)
+            self.assertFalse(os.path.exists(dated_filename))
+
 
 
     def get_results(self, content):

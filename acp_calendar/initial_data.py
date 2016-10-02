@@ -38,7 +38,7 @@ def get_holiday_type_list():
                      {'name': 'Navidad', 'short_name': 'navidad'},
                      ]
     return holiday_types
-                    
+
 
 def get_holidays_dictionary():
     holiday_list = get_holidays_list()
@@ -52,12 +52,9 @@ def get_holidays_dictionary():
     return ordered_holidays
 
 
-
-
 def get_holidays_list():
-    holidays_list = list()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     data_filename = os.path.join(dir_path, 'holiday_initial_data.json')
-    with open(data_filename) as json_data:
+    with open(data_filename, encoding='utf-8') as json_data:
         holidays_list = json.load(json_data)
     return holidays_list
