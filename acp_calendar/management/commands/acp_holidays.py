@@ -70,8 +70,8 @@ class Command(BaseCommand):
             holiday_dict['holiday_type'] = db_holiday.holiday_type.short_name
             holidays.append(holiday_dict)
 
-        with open(filename, 'w') as outfile:
-            json.dump(holidays, outfile, indent=4)
+        with open(filename, 'w', encoding='utf-8') as outfile:
+            json.dump(holidays, outfile, indent=4, ensure_ascii=False)
         self.stdout.write('Wrote %d holidays to %s' % (len(db_holidays), filename))
 
 

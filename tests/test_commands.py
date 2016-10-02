@@ -14,6 +14,9 @@ from acp_calendar.models import ACPHoliday
 
 import environ
 
+from .utils import add_date_to_filename
+
+
 class TestACPHolidayCommand(TestCase):
 
 
@@ -43,7 +46,8 @@ class TestACPHolidayCommand(TestCase):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         filename = os.path.join(output_dir, 'holidays.json')
-        call_command('acp_holidays', export_filename=filename, stdout=content)
+        dated_filename = add_date_to_filename(filename)
+        call_command('acp_holidays', export_filename=dated_filename, stdout=content)
         self.assertTrue(os.path.exists(filename))
 
 
