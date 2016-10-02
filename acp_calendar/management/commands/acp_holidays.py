@@ -1,16 +1,13 @@
-import collections
 import json
 
 from django.core.management import BaseCommand
 
 from ...initial_data import get_holidays_dictionary
-from ...exceptions import ACPCalendarException
-from ...models import ACPHoliday, HolidayType
-
+from ...models import ACPHoliday
 
 
 class Command(BaseCommand):
-    '''
+    """
     $ python manage.py acp_holidays --list-initial
 
     You will get a print out like this. The [*] on the first column means that the initial data
@@ -30,7 +27,7 @@ class Command(BaseCommand):
     ======================================================================
     Found 133 in initials
     Found 132 in database
-    '''
+    """
 
     def add_arguments(self, parser):
         #parser.add_argument('optional-argument', nargs='?')

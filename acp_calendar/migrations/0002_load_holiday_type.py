@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import migrations, models
+from django.db import migrations
 
-from acp_calendar.initial_data import load_data
+from ..initial_data import load_data
 
 
 class Migration(migrations.Migration):

@@ -1,19 +1,11 @@
-import base64
 import os
-from unittest import mock
-from django.test import TestCase
-
-import re
 from io import StringIO
 
-from django.conf import settings
+import environ
 from django.core.management import call_command
 from django.test import TestCase
 
 from acp_calendar.models import ACPHoliday
-
-import environ
-
 from .utils import add_date_to_filename
 
 

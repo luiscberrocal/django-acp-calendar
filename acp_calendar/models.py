@@ -8,12 +8,12 @@ from .exceptions import ACPCalendarException
 
 
 class FiscalYear(object):
-    '''
+    """
     This class represents a Pancama Canal Fiscal year which start on October first
     of the previous year and ends on September 30th of the current year.
     For example fiscal year 2016 starts on October 1st, 2015 and ends September 30th
     2016
-    '''
+    """
 
     def __init__(self, year, **kwargs):
         """
@@ -127,6 +127,12 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def days_in_range_generator(start_date, end_date):
+        """
+        Creates a generator that contains all date dates between start_date and end_date
+        :param start_date: Start date in string or date
+        :param end_date: End date in string or date
+        :return: A generator containing all dates in range
+        """
         start_date = ACPHoliday.convert_to_date(start_date)
         end_date = ACPHoliday.convert_to_date(end_date)
         start_date = start_date - timedelta(1)
