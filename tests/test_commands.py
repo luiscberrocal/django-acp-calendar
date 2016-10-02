@@ -48,7 +48,7 @@ class TestACPHolidayCommand(TestCase):
         filename = os.path.join(output_dir, 'holidays.json')
         dated_filename = add_date_to_filename(filename)
         call_command('acp_holidays', export_filename=dated_filename, stdout=content)
-        self.assertTrue(os.path.exists(filename))
+        self.assertTrue(os.path.exists(dated_filename))
 
 
     def get_results(self, content):

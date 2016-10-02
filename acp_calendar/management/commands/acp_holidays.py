@@ -3,9 +3,10 @@ import json
 
 from django.core.management import BaseCommand
 
+from ...initial_data import get_holidays_dictionary
 from ...exceptions import ACPCalendarException
 from ...models import ACPHoliday, HolidayType
-from ...initial_data import HOLIDAYS_INITIAL_DATA
+
 
 
 class Command(BaseCommand):
@@ -79,14 +80,15 @@ class Command(BaseCommand):
     def _list_initial_data(self):
         count_initial_holidays = 0
         count_db_holidays = 0
-        ordered_holidays = collections.OrderedDict(sorted(HOLIDAYS_INITIAL_DATA.items()))
+
+        ordered_holidays = get_holidays_dictionary()
         for year, holidays in ordered_holidays.items():
-            self.stdout.write('Year %d  (%d holidays)' % (year, len(holidays)))
+            self.stdout.write('Year %s  (%d holidays)' % (year, len(holidays)))
             self.stdout.write('-' * 70)
             for holiday in holidays:
                 display = dict()
                 display['found'] = '*'
-                display['date'] = holiday['date'].strftime('%Y-%m-%d')
+                display['date'] = holiday['date'] #.strftime('%Y-%m-%d')
                 count_initial_holidays += 1
                 try:
                     if isinstance(holiday['holiday_type'], str):
