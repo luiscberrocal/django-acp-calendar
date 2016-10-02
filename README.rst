@@ -1,3 +1,4 @@
+============
 ACP-Calendar
 ============
 
@@ -18,12 +19,12 @@ ACP-Calendar
 Holiday calendar and date management for the Panama Canal. Includes Panama Canal holidays from 2006 to 2017.
 
 Documentation
--------------
+=============
 
 The full documentation is at https://acp-calendar.readthedocs.org.
 
 Quickstart
-----------
+==========
 
 Install ACP-Calendar
 
@@ -103,7 +104,7 @@ Add the acp_calendar.urls to your urls file.
 
 
 Features
---------
+========
 
 Holidays
 ++++++++

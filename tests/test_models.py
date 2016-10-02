@@ -34,6 +34,16 @@ class TestFiscalYear(TestCase):
         fy = FiscalYear.create_from_date(cdate)
         self.assertEqual('FY14', str(fy))
 
+    def test_create_from_date_2(self):
+        cdate = datetime.date(2014, 9, 1)
+        fy = FiscalYear.create_from_date(cdate)
+        self.assertEqual('FY14', str(fy))
+
+    def test_create_from_date_datetime(self):
+        cdate = datetime.datetime(2013, 10, 1, 0,0,0)
+        fy = FiscalYear.create_from_date(cdate)
+        self.assertEqual('FY14', str(fy))
+
 class TestHolidayType(TestCase):
 
     def setUp(self):
@@ -46,6 +56,10 @@ class TestHolidayType(TestCase):
         self.assertEqual(12, loaded_holiday_types)
         self.assertEqual(1 + loaded_holiday_types, HolidayType.objects.count())
 
+    def test_str(self):
+        navidad = HolidayType.objects.get(short_name='navidad')
+        self.assertEqual('Navidad', str(navidad))
+
     def tearDown(self):
         pass
 
@@ -54,6 +68,10 @@ class TestACPHoliday(TestCase):
 
     def setUp(self):
         pass
+
+    def test_str(self):
+        holiday = ACPHoliday.objects.first()
+        self.assertEqual('2006-01-01 Año Nuevo', str(holiday))
 
     def test_load_initial(self):
         loaded_holidays = len(get_holidays_list())

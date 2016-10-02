@@ -62,7 +62,7 @@ class ACPHoliday(models.Model):
     holiday_type = models.ForeignKey(HolidayType, verbose_name=_('Holiday type'))
 
     def __str__(self):
-        return '%s %s' % (self.date.strptime('%Y-%m-%d'), self.holiday_type)
+        return '%s %s' % (self.date.strftime('%Y-%m-%d'), self.holiday_type)
 
     class Meta:
         ordering = ('date',)
