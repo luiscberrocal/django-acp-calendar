@@ -1,7 +1,6 @@
 import base64
 import os
 from unittest import mock
-
 from django.test import TestCase
 
 import re
@@ -13,6 +12,7 @@ from django.test import TestCase
 
 from acp_calendar.models import ACPHoliday
 
+import environ
 
 class TestACPHolidayCommand(TestCase):
 
@@ -35,6 +35,17 @@ class TestACPHolidayCommand(TestCase):
         self.assertEqual('Found 0 in database', results[-1:][0])
         self.assertEqual('Found 133 in initials', results[-2:-1][0])
         self.assertEqual('\t[-] mártires                       2006-01-09', results[3:4][0])
+
+    def test_export_holidays(self):
+        content = StringIO()
+        root_dir = environ.Path(__file__) - 2
+        output_dir = str(root_dir.path('output'))
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        filename = os.path.join(output_dir, 'holidays.json')
+        call_command('acp_holidays', export_filename=filename, stdout=content)
+        self.assertTrue(os.path.exists(filename))
+
 
     def get_results(self, content):
         content.seek(0)
