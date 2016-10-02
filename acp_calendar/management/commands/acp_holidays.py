@@ -63,6 +63,22 @@ class Command(BaseCommand):
             self._export_holidays(options['export_filename'])
 
     def _export_holidays(self, filename):
+        """
+        Exports all ACPHoldays in the database to pretty pring json file in UTF-8 format.
+        it exports the holidays in the format the initial_data need to load holidays:
+
+            {
+                "date": "2006-01-01",
+                "holiday_type": "año_nuevo"
+            },
+            {
+                "date": "2006-01-09",
+                "holiday_type": "mártires"
+            },
+        ..
+
+        :param filename: JSON file to save database content
+        """
         holidays = list()
         db_holidays = ACPHoliday.objects.all()
         for db_holiday in db_holidays:
@@ -91,14 +107,8 @@ class Command(BaseCommand):
                 display['date'] = holiday['date'] #.strftime('%Y-%m-%d')
                 count_initial_holidays += 1
                 try:
-                    if isinstance(holiday['holiday_type'], str):
-                        short_name = holiday['holiday_type']
-                    elif type(holiday['holiday_type']).__name__ == 'HolidayType':
-                        short_name = holiday['holiday_type'].short_name
-                    else:
-                        msg = 'Holiday type must be either an instance of str or of HolidayType. ' \
-                              'Your are using an instance of %s' % holiday['holiday_type'].__class__.__name__
-                        raise ACPCalendarException(msg)
+                    assert isinstance(holiday['holiday_type'], str), 'Holiday type should be a string'
+                    short_name = holiday['holiday_type']
                     display['holiday_type'] = short_name
                     ACPHoliday.objects.get(holiday_type__short_name=short_name,
                                            date=holiday['date'])
