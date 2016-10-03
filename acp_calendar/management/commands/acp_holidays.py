@@ -133,7 +133,13 @@ class Command(BaseCommand):
         self.stdout.write('Found %d in database' % count_db_holidays)
 
     def _update_initial_data(self, test=False):
-        """Updates the holiday types and holidays from initial data"""
+        """Checks for updated holiday types and holidays from initial data and
+        adds to database.
+
+        @param: test: Set to True for tests. Will insert some test values and
+                      will not write to actual database.
+        @type: test: bool
+        """
         if test:
             self.stdout.write("WARNING: Test flag is set, will use test data and not write to database.")
         self.stdout.write('Checking for updated HolidayType...')
