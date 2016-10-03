@@ -55,7 +55,15 @@ class TestACPHolidayCommand(TestCase):
             os.remove(dated_filename)
             self.assertFalse(os.path.exists(dated_filename))
 
-
+    def test_update_initial(self):
+        content = StringIO()
+        call_command('acp_holidays', update_initial_test=True, stdout=content)
+        results = self.get_results(content)
+        self.assertEqual('HolidayType test_holiday_type created.', results[3])
+        self.assertEqual('HolidayType: 1 created, 0 updated, 0 skipped.', results[4])
+        self.assertEqual('New ACPHoliday created: date: 2018-11-01 holiday_type: test_holiday_type', results[7])
+        self.assertEqual('New ACPHoliday created: date: 2018-12-01 holiday_type: test_holiday_type', results[8])
+        self.assertEqual('ACPHoliday: 2 created, 0 updated, 0 skipped.', results[9])
 
     def get_results(self, content):
         content.seek(0)
