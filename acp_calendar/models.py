@@ -176,6 +176,12 @@ class ACPHoliday(models.Model):
 
     @staticmethod
     def get_working_days_for_month(year, month):
+        """
+        Calculate the amount of working days in a month
+        :param year: Year
+        :param month: month
+        :return: Number of working days
+        """
         try:
             last_day_of_month = monthrange(year, month)[1]
             start_date = date(year, month, 1)

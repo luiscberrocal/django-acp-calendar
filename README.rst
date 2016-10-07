@@ -21,7 +21,7 @@ Holiday calendar and date management for the Panama Canal. Includes Panama Canal
 Documentation
 =============
 
-The full documentation is at https://acp-calendar.readthedocs.org.
+The full documentation is at http://django-acp-calendar.readthedocs.io/.
 
 Quickstart
 ==========
