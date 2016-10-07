@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 import collections
 import json
@@ -10,7 +11,7 @@ from ...models import ACPHoliday, HolidayType
 
 
 class Command(BaseCommand):
-    '''
+    """
     $ python manage.py acp_holidays --list-initial
 
     You will get a print out like this. The [*] on the first column means that the initial data
@@ -30,7 +31,7 @@ class Command(BaseCommand):
     ======================================================================
     Found 133 in initials
     Found 132 in database
-    '''
+    """
 
     def add_arguments(self, parser):
         #parser.add_argument('optional-argument', nargs='?')
@@ -149,7 +150,7 @@ class Command(BaseCommand):
             initial_holiday_types.append(
                 {'name': 'TestHolidayType', 'short_name': 'test_holiday_type'})
         self.stdout.write(
-            '{} HolidayType found.'.format(len(initial_holiday_types)))        
+            '{} HolidayType found.'.format(len(initial_holiday_types)))
         num_created = 0
         num_updated = 0
         num_skipped = 0
@@ -229,7 +230,7 @@ class Command(BaseCommand):
                     continue
                 else:
                     pass
-            # Check holidays 
+            # Check holidays
             qs = ACPHoliday.objects.filter(date=formatted_date)
             if qs.count():
                 # If holiday exists, check if need to update HolidayType

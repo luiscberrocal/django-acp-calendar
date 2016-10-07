@@ -1,19 +1,11 @@
-import base64
 import os
-from unittest import mock
-from django.test import TestCase
-
-import re
 from io import StringIO
 
-from django.conf import settings
+import environ
 from django.core.management import call_command
 from django.test import TestCase
 
-from acp_calendar.models import ACPHoliday
-
-import environ
-
+from acp_calendar.models import ACPHoliday, HolidayType
 from .utils import add_date_to_filename
 
 
@@ -55,7 +47,7 @@ class TestACPHolidayCommand(TestCase):
             os.remove(dated_filename)
             self.assertFalse(os.path.exists(dated_filename))
 
-    def test_update_initial(self):
+    def test_update_initial_test(self):
         content = StringIO()
         call_command('acp_holidays', update_initial_test=True, stdout=content)
         results = self.get_results(content)
@@ -64,6 +56,24 @@ class TestACPHolidayCommand(TestCase):
         self.assertEqual('New ACPHoliday created: date: 2018-11-01 holiday_type: test_holiday_type', results[7])
         self.assertEqual('New ACPHoliday created: date: 2018-12-01 holiday_type: test_holiday_type', results[8])
         self.assertEqual('ACPHoliday: 2 created, 0 updated, 0 skipped.', results[9])
+
+    def test_update_initial(self):
+        content = StringIO()
+        ACPHoliday.objects.all().delete()
+        self.assertEqual(0, ACPHoliday.objects.count())
+        call_command('acp_holidays', update_initial=True, stdout=content)
+        results = self.get_results(content)
+        self.assertEqual(133, ACPHoliday.objects.count())
+
+    def test_update_initial_holiday_types(self):
+        content = StringIO()
+        HolidayType.objects.all().delete()
+        self.assertEqual(0, HolidayType.objects.count())
+        call_command('acp_holidays', update_initial=True, stdout=content)
+        results = self.get_results(content)
+        self.assertEqual(12, HolidayType.objects.count())
+
+
 
     def get_results(self, content):
         content.seek(0)

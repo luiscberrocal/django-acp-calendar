@@ -19,7 +19,7 @@ def load_data(apps, schema_editor):
             holiday_type = HolidayType.objects.get(short_name=holiday_data['holiday_type'])
             holiday_date = datetime.strptime(holiday_data['date'], load_date_format)
             ACPHoliday.objects.create(date=holiday_date, holiday_type=holiday_type )
-        except HolidayType.DoesNotExist as e:
+        except HolidayType.DoesNotExist:
             raise ACPCalendarException('Could not find a holiday type for %s' % holiday_data['holiday_type'])
 
 

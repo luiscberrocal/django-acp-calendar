@@ -8,11 +8,9 @@ test_acp-calendar
 Tests for `acp-calendar` models module.
 """
 import datetime
-from calendar import IllegalMonthError
 
 from django.test import TestCase
 
-from acp_calendar import models
 from acp_calendar.initial_data import get_holiday_type_list, get_holidays_list
 from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear, ACPCalendarException
 
