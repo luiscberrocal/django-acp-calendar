@@ -12,7 +12,7 @@
 # serve to show the default.
 
 import sys, os
-
+import django
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -21,6 +21,12 @@ import sys, os
 cwd = os.getcwd()
 parent = os.path.dirname(cwd)
 sys.path.append(parent)
+
+sys.path.insert(0, os.path.abspath('_ext'))
+sys.path.insert(0, os.path.abspath('..'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'djangodummy.settings'
+if django.VERSION >= (1, 7):
+    django.setup()
 
 import acp_calendar
 

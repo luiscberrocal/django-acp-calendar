@@ -17,3 +17,12 @@ Contents:
    contributing
    authors
    history
+
+
+API documentation
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   acp_calendar/index
