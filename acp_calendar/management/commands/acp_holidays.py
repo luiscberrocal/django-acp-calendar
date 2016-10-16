@@ -14,7 +14,7 @@ class Command(BaseCommand):
     """
     To list the holidays:
 
-    .. code:: bash
+    .. code-block:: bash
 
         $ python manage.py acp_holidays --list-initial
 
@@ -22,7 +22,7 @@ class Command(BaseCommand):
     is already on the database.  The [-] on the first column means that the initial data
     is not on the database.
 
-    .. code:: bash
+    .. code-block:: bash
 
         Year 2006  (11 holidays)
         ----------------------------------------------------------------------
