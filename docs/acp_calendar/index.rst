@@ -7,3 +7,4 @@ API documentation
    :maxdepth: 2
 
    acp_calendar.models
+   acp_calendar.management.commands.acp_holidays
