@@ -12,25 +12,31 @@ from ...models import ACPHoliday, HolidayType
 
 class Command(BaseCommand):
     """
-    $ python manage.py acp_holidays --list-initial
+    To list the holidays:
+
+    .. code:: bash
+
+        $ python manage.py acp_holidays --list-initial
 
     You will get a print out like this. The [*] on the first column means that the initial data
     is already on the database.  The [-] on the first column means that the initial data
     is not on the database.
 
-    Year 2006  (11 holidays)
-    ----------------------------------------------------------------------
-    [*] año_nuevo                      2006-01-01
-    [-] mártires                       2006-01-09
-    [*] martes_carnaval                2006-02-28
-    [*] viernes_santo                  2006-04-14
-    [*] día_del_trabajo                2006-05-01
+    .. code:: bash
 
-    ...
+        Year 2006  (11 holidays)
+        ----------------------------------------------------------------------
+        [*] año_nuevo                      2006-01-01
+        [-] mártires                       2006-01-09
+        [*] martes_carnaval                2006-02-28
+        [*] viernes_santo                  2006-04-14
+        [*] día_del_trabajo                2006-05-01
 
-    ======================================================================
-    Found 133 in initials
-    Found 132 in database
+        ...
+
+        ======================================================================
+        Found 133 in initials
+        Found 132 in database
     """
 
     def add_arguments(self, parser):

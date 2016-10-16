@@ -11,3 +11,5 @@ STATIC_URL = '/static/'
 SECRET_KEY = 'docs'
 
 SITE_ID = None
+
+INSTALLED_APPS = ['acp_calendar']
