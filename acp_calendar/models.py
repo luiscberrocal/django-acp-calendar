@@ -50,6 +50,13 @@ class FiscalYear(object):
 
 
 class HolidayType(models.Model):
+    """
+    Model for Holiday type.
+
+    .. code::python
+
+        holiday = Holiday.objects.create(name='Christmas', short_name='xmas')
+    """
     name = models.CharField(_('Holiday name'), max_length=60)
     short_name = models.CharField(_('short name'), max_length=60, unique=True)
 

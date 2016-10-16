@@ -16,3 +16,10 @@ The ``HolidayType`` model
 
 .. autoclass:: acp_calendar.models.HolidayType
    :members:
+
+
+The ``ACPHoliday`` model
+-------------------------------
+
+.. autoclass:: acp_calendar.models.ACPHoliday
+   :members:
