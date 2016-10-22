@@ -6,7 +6,7 @@ import collections
 
 from .exceptions import ACPCalendarException
 
-load_date_format = '%Y-%m-%d'
+from . import app_settings
 
 def load_data(apps, schema_editor):
     HolidayType = apps.get_model("acp_calendar", "HolidayType")
@@ -17,7 +17,7 @@ def load_data(apps, schema_editor):
     for holiday_data in get_holidays_list():
         try:
             holiday_type = HolidayType.objects.get(short_name=holiday_data['holiday_type'])
-            holiday_date = datetime.strptime(holiday_data['date'], load_date_format)
+            holiday_date = datetime.strptime(holiday_data['date'], app_settings.LOAD_DATE_FORMAT)
             ACPHoliday.objects.create(date=holiday_date, holiday_type=holiday_type )
         except HolidayType.DoesNotExist:
             raise ACPCalendarException('Could not find a holiday type for %s' % holiday_data['holiday_type'])
