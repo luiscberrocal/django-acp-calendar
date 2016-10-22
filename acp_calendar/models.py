@@ -37,7 +37,7 @@ class FiscalYear(object):
         """
         Creates a Fiscal year object for a date.
 
-        :param cdate: Date whitin the fiscal year
+        :param cdate: Date or datetime object whitin the fiscal year
         :param kwargs: Same kwargs as for the contructor
         :return: a FiscalYear object
         """
@@ -67,6 +67,10 @@ class HolidayType(models.Model):
 
 
 class ACPHoliday(models.Model):
+    """
+    Model for a non working day in the Panama Canal due to a holiday. This model contains all the logic for the
+    working days calculations.
+    """
     date = models.DateField(_('Date'), unique=True)
     holiday_type = models.ForeignKey(HolidayType, verbose_name=_('Holiday type'))
 

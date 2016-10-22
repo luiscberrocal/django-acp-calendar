@@ -37,6 +37,12 @@ class Command(BaseCommand):
         ======================================================================
         Found 133 in initials
         Found 132 in database
+
+    To export your the holidays currently in the database to a json file
+
+    ..code-block:: bash
+
+        $  python manage.py acp_holidays --export-holidays=/path/to/your/file.json
     """
 
     def add_arguments(self, parser):

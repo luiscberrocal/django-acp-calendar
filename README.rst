@@ -199,7 +199,7 @@ Run bumpversion
     $ bumpversion minor
 
 
-Instead of minor you could also use major o patch depending on the level of the release.
+Instead of minor you could also use **major** o **patch** depending on the level of the release.
 
 .. code-block:: bash
 
