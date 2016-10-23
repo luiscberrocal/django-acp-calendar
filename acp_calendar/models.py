@@ -34,6 +34,13 @@ class FiscalYear(object):
         return self.fy_format['display'] % str(self.year)[self.fy_format['length']:]
 
     def months_in_fiscal_year(self):
+        """
+        Gets a tuple of tuple containing the month number and the year of the months in the
+        fiscal year.
+
+        :return: a tuple containing 12 tuples. Each tuple contains 2 integer, the first one is the month the
+        second one is the year.
+        """
         return ((10, self.year-1), (11, self.year-1), (12, self.year-1),
                 (1, self.year),(2, self.year),(3, self.year),(4, self.year),
                 (5, self.year),(6, self.year),(7, self.year),(8, self.year),

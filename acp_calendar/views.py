@@ -2,6 +2,7 @@ from datetime import date
 from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic import View
+from django.utils import timezone
 
 from . import __version__ as current_version
 from .exceptions import ACPCalendarException
@@ -12,22 +13,30 @@ class CalendarView(View):
 
     template_name = 'acp_calendar/fiscal_year_calendar.html'
 
-    def get(self, request):
-        year = 2017
+    def get(self, request, *args, **kwargs):
+        year = int(kwargs['fiscal_year'])
         fiscal_year = FiscalYear(year)
         data = dict()
         data['months'] = list()
         data['version'] = current_version
         data['fiscal_year'] = year
-        for month in fiscal_year.months_in_fiscal_year():
-            month_data = dict()
-            month_data['month'] = date(month[1], month[0], 1).strftime('%b')
-            month_data['year'] = month[1]
-            month_data['working_days'] = ACPHoliday.get_working_days_for_month(month[1], month[0])
-            data['months'].append(month_data)
+        data['working_days_in_fiscal_year'] = 0
+        try:
+            for month in fiscal_year.months_in_fiscal_year():
+                month_data = dict()
+                month_data['month'] = date(month[1], month[0], 1).strftime('%b')
+                month_data['year'] = month[1]
+                month_data['working_days'] = ACPHoliday.get_working_days_for_month(month[1], month[0])
+                data['working_days_in_fiscal_year'] += month_data['working_days']
+                data['months'].append(month_data)
+            today = timezone.now().date()
+            if today <= fiscal_year.end_date:
+                data['remaining_working_days_in_fiscal_year'] = ACPHoliday.get_working_days(today, fiscal_year.end_date)
+            else:
+                data['remaining_working_days_in_fiscal_year'] = 0
+        except ACPCalendarException as e:
+            data['errors'] = str(e)
         return render(request, self.template_name, data)
-
-
 
 
 class CalculatorView(View):
