@@ -4,8 +4,10 @@ import collections
 import json
 import datetime
 from django.core.management import BaseCommand
+
+from ... import app_settings
 from ...initial_data import get_holidays_dictionary, get_holiday_type_list, \
-    get_holidays_list, load_date_format
+    get_holidays_list
 from ...exceptions import ACPCalendarException
 from ...models import ACPHoliday, HolidayType
 
@@ -110,7 +112,7 @@ class Command(BaseCommand):
         db_holidays = ACPHoliday.objects.all()
         for db_holiday in db_holidays:
             holiday_dict = dict()
-            holiday_dict['date'] = db_holiday.date.strftime('%Y-%m-%d')
+            holiday_dict['date'] = db_holiday.date.strftime(app_settings.LOAD_DATE_FORMAT)
             holiday_dict['holiday_type'] = db_holiday.holiday_type.short_name
             holidays.append(holiday_dict)
 
@@ -129,7 +131,7 @@ class Command(BaseCommand):
             for holiday in holidays:
                 display = dict()
                 display['found'] = '*'
-                display['date'] = holiday['date'] #.strftime('%Y-%m-%d')
+                display['date'] = holiday['date']
                 count_initial_holidays += 1
                 try:
                     assert isinstance(holiday['holiday_type'], str), 'Holiday type should be a string'
@@ -224,7 +226,7 @@ class Command(BaseCommand):
             # Parse date
             try:
                 formatted_date = datetime.datetime.strptime(
-                    h_date, load_date_format)
+                    h_date, app_settings.LOAD_DATE_FORMAT)
             except Exception as e:
                 num_skipped += 1
                 self.stdout.write(

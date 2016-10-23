@@ -4,6 +4,7 @@ from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
+from . import app_settings
 from .exceptions import ACPCalendarException
 
 
@@ -31,6 +32,19 @@ class FiscalYear(object):
 
     def __str__(self):
         return self.fy_format['display'] % str(self.year)[self.fy_format['length']:]
+
+    def months_in_fiscal_year(self):
+        """
+        Gets a tuple of tuple containing the month number and the year of the months in the
+        fiscal year.
+
+        :return: a tuple containing 12 tuples. Each tuple contains 2 integer, the first one is the month the
+        second one is the year.
+        """
+        return ((10, self.year-1), (11, self.year-1), (12, self.year-1),
+                (1, self.year),(2, self.year),(3, self.year),(4, self.year),
+                (5, self.year),(6, self.year),(7, self.year),(8, self.year),
+                (9, self.year))
 
     @staticmethod
     def create_from_date(cdate, **kwargs):
@@ -75,7 +89,7 @@ class ACPHoliday(models.Model):
     holiday_type = models.ForeignKey(HolidayType, verbose_name=_('Holiday type'))
 
     def __str__(self):
-        return '%s %s' % (self.date.strftime('%Y-%m-%d'), self.holiday_type)
+        return '{0} {1}'.format(self.date.strftime(app_settings.DATE_FORMAT), self.holiday_type)
 
     class Meta:
         ordering = ('date',)
@@ -131,7 +145,7 @@ class ACPHoliday(models.Model):
         """
         if isinstance(study_date, str):
             try:
-                date_object = datetime.strptime(study_date, '%Y-%m-%d').date()
+                date_object = datetime.strptime(study_date, app_settings.DATE_FORMAT).date()
                 return date_object
             except ValueError as e:
                 raise ACPCalendarException(str(e))

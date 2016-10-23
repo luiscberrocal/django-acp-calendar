@@ -1,9 +1,14 @@
 import json
+from datetime import datetime
+from unittest.mock import patch, Mock
 
+import pytz
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from acp_calendar.forms import CalculatorForm
+from acp_calendar.models import ACPHoliday, FiscalYear
 
 
 class TestACPHolidayListAPIView(TestCase):
@@ -69,6 +74,57 @@ class TestCalendarCalculationsView(TestCase):
         result = {"year": "2016", "month": "13", "days": '-1', 'error': 'bad month number 13; must be 1-12'}
         response = self.client.get('/api/working-month/{year}/{month}/'.format(**result))
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
+
+
+class TestCalendarView(TestCase):
+
+    version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
+
+    @patch('django.utils.timezone.now')
+    def test_get_current(self, timezone_now_date):
+        time_zone = pytz.timezone(settings.TIME_ZONE)
+        aware_datetime = time_zone.localize(datetime(2016, 10, 23, 20, 0), is_dst=None)
+        timezone_now_date.return_value = aware_datetime
+
+        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': 2017})
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
+        self.assertRegex(response.context['version'], self.version_regex)
+        self.assertEqual(2017, response.context['fiscal_year'])
+        self.assertEqual(249, response.context['working_days_in_fiscal_year'])
+        self.assertEqual(234, response.context['remaining_working_days_in_fiscal_year'])
+        months = response.context['months']
+        self.assertEqual(12, len(months))
+        self.assertEqual('Oct', months[0]['month'])
+        self.assertEqual(2016, months[0]['year'])
+        self.assertEqual(21, months[0]['working_days'])
+
+    def test_get_previous(self):
+        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': 2016})
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
+        self.assertRegex(response.context['version'], self.version_regex)
+        self.assertEqual(2016, response.context['fiscal_year'])
+        self.assertEqual(251, response.context['working_days_in_fiscal_year'])
+        months = response.context['months']
+        self.assertEqual(12, len(months))
+        self.assertEqual('Oct', months[0]['month'])
+        self.assertEqual(2015, months[0]['year'])
+        self.assertEqual(22, months[0]['working_days'])
+
+
+    def test_get_with_errors(self):
+        last_holiday = ACPHoliday.objects.last()
+        fiscal_year = FiscalYear.create_from_date(last_holiday.date)
+        year = fiscal_year.year + 1
+        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': year})
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
+        self.assertRegex(response.context['version'], self.version_regex)
+        self.assertEqual(year, response.context['fiscal_year'])
+        self.assertEqual('End date exceed the last registered holiday', response.context['errors'])
+
+
 
 class TestCalulatorView(TestCase):
 
