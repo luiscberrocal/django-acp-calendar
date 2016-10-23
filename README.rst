@@ -15,6 +15,10 @@ ACP-Calendar
    :target: https://codeclimate.com/github/luiscberrocal/django-acp-calendar
    :alt: Code Climate
 
+.. image:: https://requires.io/github/luiscberrocal/django-acp-calendar/requirements.svg?branch=master
+     :target: https://requires.io/github/luiscberrocal/django-acp-calendar/requirements/?branch=master
+     :alt: Requirements Status
+
 
 Holiday calendar and date management for the Panama Canal. Includes Panama Canal holidays from 2006 to 2017.
 
@@ -199,7 +203,7 @@ Run bumpversion
     $ bumpversion minor
 
 
-Instead of minor you could also use major o patch depending on the level of the release.
+Instead of minor you could also use **major** o **patch** depending on the level of the release.
 
 .. code-block:: bash
 

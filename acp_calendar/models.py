@@ -4,6 +4,7 @@ from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
+from . import app_settings
 from .exceptions import ACPCalendarException
 
 
@@ -18,6 +19,7 @@ class FiscalYear(object):
     def __init__(self, year, **kwargs):
         """
         Contructor for Fiscal year.
+
         :param year: Fiscal year
         :param kwargs: includes display wich is the template for the str method and
         length which is also used in the str method
@@ -31,11 +33,25 @@ class FiscalYear(object):
     def __str__(self):
         return self.fy_format['display'] % str(self.year)[self.fy_format['length']:]
 
+    def months_in_fiscal_year(self):
+        """
+        Gets a tuple of tuple containing the month number and the year of the months in the
+        fiscal year.
+
+        :return: a tuple containing 12 tuples. Each tuple contains 2 integer, the first one is the month the
+        second one is the year.
+        """
+        return ((10, self.year-1), (11, self.year-1), (12, self.year-1),
+                (1, self.year),(2, self.year),(3, self.year),(4, self.year),
+                (5, self.year),(6, self.year),(7, self.year),(8, self.year),
+                (9, self.year))
+
     @staticmethod
     def create_from_date(cdate, **kwargs):
         """
-        Creates a Fiscal year object for a date
-        :param cdate: Date whitin the fiscal year
+        Creates a Fiscal year object for a date.
+
+        :param cdate: Date or datetime object whitin the fiscal year
         :param kwargs: Same kwargs as for the contructor
         :return: a FiscalYear object
         """
@@ -53,7 +69,7 @@ class HolidayType(models.Model):
     """
     Model for Holiday type.
 
-    .. code::python
+    .. code-block::python
 
         holiday = Holiday.objects.create(name='Christmas', short_name='xmas')
     """
@@ -65,11 +81,15 @@ class HolidayType(models.Model):
 
 
 class ACPHoliday(models.Model):
+    """
+    Model for a non working day in the Panama Canal due to a holiday. This model contains all the logic for the
+    working days calculations.
+    """
     date = models.DateField(_('Date'), unique=True)
     holiday_type = models.ForeignKey(HolidayType, verbose_name=_('Holiday type'))
 
     def __str__(self):
-        return '%s %s' % (self.date.strftime('%Y-%m-%d'), self.holiday_type)
+        return '{0} {1}'.format(self.date.strftime(app_settings.DATE_FORMAT), self.holiday_type)
 
     class Meta:
         ordering = ('date',)
@@ -101,6 +121,7 @@ class ACPHoliday(models.Model):
         """
         Calculates the amount of working days between start date and end date. It will calculate all days that are not
         saturday or sunday and then substract the holiday in the range if they exist.
+
         :param start_date:
         :param end_date:
         :param kwargs:
@@ -118,12 +139,13 @@ class ACPHoliday(models.Model):
     def convert_to_date(study_date):
         """
         Converts String to date to a date object.
+
         :param study_date: date to be processed
         :return: date object
         """
         if isinstance(study_date, str):
             try:
-                date_object = datetime.strptime(study_date, '%Y-%m-%d').date()
+                date_object = datetime.strptime(study_date, app_settings.DATE_FORMAT).date()
                 return date_object
             except ValueError as e:
                 raise ACPCalendarException(str(e))
@@ -136,6 +158,7 @@ class ACPHoliday(models.Model):
     def days_in_range_generator(start_date, end_date):
         """
         Creates a generator that contains all date dates between start_date and end_date
+
         :param start_date: Start date in string or date
         :param end_date: End date in string or date
         :return: A generator containing all dates in range
@@ -158,6 +181,7 @@ class ACPHoliday(models.Model):
     def working_delta(start_date, working_days):
         """
         Calculates the date based on a start date and the number of working days in the future
+
         :param start_date: Start date
         :param working_days: Number of woking days to the date we are interested
         :return: Date that is n working days from start date.
@@ -185,6 +209,7 @@ class ACPHoliday(models.Model):
     def get_working_days_for_month(year, month):
         """
         Calculate the amount of working days in a month
+
         :param year: Year
         :param month: month
         :return: Number of working days
