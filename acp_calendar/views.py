@@ -1,28 +1,50 @@
+from datetime import date
 from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic import View
 
-import acp_calendar
+from . import __version__ as current_version
 from .exceptions import ACPCalendarException
-from .models import ACPHoliday
+from .models import ACPHoliday, FiscalYear
 from .forms import CalculatorForm
+
+class CalendarView(View):
+
+    template_name = 'acp_calendar/fiscal_year_calendar.html'
+
+    def get(self, request):
+        year = 2017
+        fiscal_year = FiscalYear(year)
+        data = dict()
+        data['months'] = list()
+        data['version'] = current_version
+        data['fiscal_year'] = year
+        for month in fiscal_year.months_in_fiscal_year():
+            month_data = dict()
+            month_data['month'] = date(month[1], month[0], 1).strftime('%b')
+            month_data['year'] = month[1]
+            month_data['working_days'] = ACPHoliday.get_working_days_for_month(month[1], month[0])
+            data['months'].append(month_data)
+        return render(request, self.template_name, data)
+
+
 
 
 class CalculatorView(View):
 
-    template_name  = 'acp_calendar/calculator.html'
+    template_name = 'acp_calendar/calculator.html'
 
     def get(self, request, *args, **kwargs):
         form = CalculatorForm()
         data = {'form': form,
-                'version': acp_calendar.__version__}
+                'version': current_version}
         return render(request, self.template_name, data)
 
     def post(self, request, *args, **kwargs):
         calculator_form = CalculatorForm(request.POST)
         data = {'form': calculator_form,
                 'working_days': None,
-                'version': acp_calendar.__version__}
+                'version': current_version}
         if calculator_form.is_valid():
             start_date = calculator_form.cleaned_data['start_date']
             end_date = calculator_form.cleaned_data['end_date']
