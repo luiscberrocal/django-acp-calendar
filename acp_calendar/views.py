@@ -10,6 +10,10 @@ from .models import ACPHoliday, FiscalYear
 from .forms import CalculatorForm
 
 class CalendarView(View):
+    """
+    View to generate a calendar for fiscal year containg the working days in every month
+    of the fiscal year.
+    """
 
     template_name = 'acp_calendar/fiscal_year_calendar.html'
 
