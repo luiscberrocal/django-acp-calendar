@@ -70,6 +70,39 @@ class TestCalendarCalculationsView(TestCase):
         response = self.client.get('/api/working-month/{year}/{month}/'.format(**result))
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
+
+class TestCalendarView(TestCase):
+
+    version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
+
+    def test_get_current(self):
+        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': 2017})
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
+        self.assertRegex(response.context['version'], self.version_regex)
+        self.assertEqual(2017, response.context['fiscal_year'])
+        self.assertEqual(249, response.context['working_days_in_fiscal_year'])
+        months = response.context['months']
+        self.assertEqual(12, len(months))
+        self.assertEqual('Oct', months[0]['month'])
+        self.assertEqual(2016, months[0]['year'])
+        self.assertEqual(21, months[0]['working_days'])
+
+    def test_get_previous(self):
+        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': 2016})
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
+        self.assertRegex(response.context['version'], self.version_regex)
+        self.assertEqual(2016, response.context['fiscal_year'])
+        self.assertEqual(251, response.context['working_days_in_fiscal_year'])
+        months = response.context['months']
+        self.assertEqual(12, len(months))
+        self.assertEqual('Oct', months[0]['month'])
+        self.assertEqual(2015, months[0]['year'])
+        self.assertEqual(22, months[0]['working_days'])
+
+
+
 class TestCalulatorView(TestCase):
 
     version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
