@@ -8,3 +8,4 @@ API documentation
 
    acp_calendar.models
    acp_calendar.management.commands.acp_holidays
+   acp_calendar.views
