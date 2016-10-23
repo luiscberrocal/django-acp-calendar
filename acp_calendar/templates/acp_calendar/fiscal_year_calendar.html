@@ -16,39 +16,27 @@
 
         <div class="row">
             {% for month in months|slice:":3" %}
-                <div class="col-md-4">
-                    <div>{{ month.month }}, {{ month.year }}</div>
-                    <div>{{ month.working_days }} working days</div>
-                </div>
+                {% include "acp_calendar/snippets/month_snippet.html" %}
             {% endfor %}
         </div>
 
         <div class="row">
             {% for month in months|slice:"3:6" %}
-                <div class="col-md-4">
-                    <div>{{ month.month }}, {{ month.year }}</div>
-                    <div>{{ month.working_days }} working days</div>
-                </div>
+                {% include "acp_calendar/snippets/month_snippet.html" %}
             {% endfor %}
         </div>
         <div class="row">
             {% for month in months|slice:"6:9" %}
-                <div class="col-md-4">
-                    <div>{{ month.month }}, {{ month.year }}</div>
-                    <div>{{ month.working_days }} working days</div>
-                </div>
+                 {% include "acp_calendar/snippets/month_snippet.html" %}
             {% endfor %}
         </div>
         <div class="row">
             {% for month in months|slice:"9:12" %}
-                <div class="col-md-4">
-                    <div>{{ month.month }}, {{ month.year }}</div>
-                    <div>{{ month.working_days }} working days</div>
-                </div>
+                 {% include "acp_calendar/snippets/month_snippet.html" %}
             {% endfor %}
         </div>
         <div class="row">
-            <div>Remaining working days: {{ remaining_working_days_in_fiscal_year }}</div>
+            <div>Remaining working days: {{ remaining_working_days_in_fiscal_year }} ({{ remaining_working_days_percentage|floatformat:2 }}% remaining)</div>
             <div>Working days: {{ working_days_in_fiscal_year }}</div>
         </div>
     {% endif %}

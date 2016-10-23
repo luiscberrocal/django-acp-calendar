@@ -34,6 +34,8 @@ class CalendarView(View):
                 data['remaining_working_days_in_fiscal_year'] = ACPHoliday.get_working_days(today, fiscal_year.end_date)
             else:
                 data['remaining_working_days_in_fiscal_year'] = 0
+
+            data['remaining_working_days_percentage'] = data['remaining_working_days_in_fiscal_year'] / data['working_days_in_fiscal_year'] *100
         except ACPCalendarException as e:
             data['errors'] = str(e)
         return render(request, self.template_name, data)
