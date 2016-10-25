@@ -60,15 +60,15 @@ setup(
     zip_safe=False,
     keywords='acp-calendar',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Framework :: Django',
-        'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.9',
-        'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.8',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Intended Audience :: Developers',
     ],
 )
