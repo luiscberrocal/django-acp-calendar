@@ -42,7 +42,7 @@ class Command(BaseCommand):
 
     To export your the holidays currently in the database to a json file
 
-    ..code-block:: bash
+    .. code-block:: bash
 
         $  python manage.py acp_holidays --export-holidays=/path/to/your/file.json
     """
