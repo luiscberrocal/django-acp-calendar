@@ -47,13 +47,13 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Luis Carlos Berrocal',
     author_email='luis.berrocal.1942@gmail.com',
-    url='https://github.com/luiscberrocal/acp-calendar',
+    url='https://github.com/luiscberrocal/django-acp-calendar',
     packages=[
         'acp_calendar',
     ],
     include_package_data=True,
     install_requires=[
-        'djangorestframework==3.5.1',
+        'djangorestframework==3.5.3',
         'pytz==2016.7',
     ],
     license="BSD",

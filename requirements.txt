@@ -1,4 +1,4 @@
-django==1.10.2
-djangorestframework==3.5.1
+django==1.10.3
+djangorestframework==3.5.3
 pytz==2016.7
 # Additional requirements go here
