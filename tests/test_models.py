@@ -10,10 +10,40 @@ Tests for `acp-calendar` models module.
 import datetime
 
 from django.test import TestCase
+from unittest.mock import patch as mock_patch
 
 from acp_calendar.initial_data import get_holiday_type_list, get_holidays_list
 from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear, ACPCalendarException
 
+import datetime
+import mock
+
+real_datetime_class = datetime.datetime
+
+
+def mock_datetime(target, datetime_module):
+    class DatetimeSubclassMeta(type):
+        @classmethod
+        def __instancecheck__(mcs, obj):
+            return isinstance(obj, real_datetime_class)
+
+    class BaseMockedDatetime(real_datetime_class):
+        @classmethod
+        def now(cls, tz=None):
+            return target.replace(tzinfo=tz)
+
+        @classmethod
+        def utcnow(cls):
+            return target
+
+        @classmethod
+        def today(cls):
+            return target
+
+    # Python2 & Python3-compatible metaclass
+    MockedDatetime = DatetimeSubclassMeta('datetime', (BaseMockedDatetime,), {})
+
+    return mock.patch.object(datetime_module, 'datetime', MockedDatetime)
 
 class TestFiscalYear(TestCase):
 
@@ -41,6 +71,14 @@ class TestFiscalYear(TestCase):
         cdate = datetime.datetime(2013, 10, 1, 0,0,0)
         fy = FiscalYear.create_from_date(cdate)
         self.assertEqual('FY14', str(fy))
+
+    def test_current_fiscal_year(self):
+        target = datetime.datetime(2016, 10, 1, 0,0,0)
+        with mock_datetime(target, datetime):
+            fy = FiscalYear.current_fiscal_year()
+            self.assertEqual('FY17', str(fy))
+
+
 
 class TestHolidayType(TestCase):
 
