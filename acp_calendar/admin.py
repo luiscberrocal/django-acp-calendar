@@ -4,7 +4,7 @@ from acp_calendar.models import HolidayType, ACPHoliday
 
 
 class HolidayTypeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name')
+    list_display = ('short_name', 'name')
 
 class ACPHolidayAdmin(admin.ModelAdmin):
     list_display = ('date', 'holiday_type')

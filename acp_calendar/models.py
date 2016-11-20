@@ -51,8 +51,8 @@ class FiscalYear(object):
         """
         Creates a Fiscal year object for a date.
 
-        :param cdate: Date or datetime object whitin the fiscal year
-        :param kwargs: Same kwargs as for the contructor
+        :param cdate: Date or datetime object within the fiscal year
+        :param kwargs: Same kwargs as for the constructor
         :return: a FiscalYear object
         """
         if isinstance(cdate, datetime):
@@ -64,6 +64,16 @@ class FiscalYear(object):
             year = cdate.year
         return FiscalYear(year, **kwargs)
 
+    @staticmethod
+    def current_fiscal_year(**kwargs):
+
+        """
+        Create a fiscal year object for current date
+        :param kwargs: Same kwargs as for the constructor
+        :return: FiscalYear object for current date
+        """
+        cdate = datetime.now().date()
+        return FiscalYear.create_from_date(cdate, **kwargs)
 
 class HolidayType(models.Model):
     """
