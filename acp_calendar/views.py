@@ -1,5 +1,6 @@
 from datetime import date
 from django.contrib import messages
+from django.db.models import Count
 from django.shortcuts import render
 from django.views.generic import View
 from django.utils import timezone
@@ -8,6 +9,33 @@ from . import __version__ as current_version
 from .exceptions import ACPCalendarException
 from .models import ACPHoliday, FiscalYear
 from .forms import CalculatorForm
+
+class HomeView(View):
+    template_name = 'acp_calendar/home.html'
+
+    def get(self, request, *args, **kwargs):
+        data = dict()
+        data['version'] = current_version
+        data['years'] = self._get_years_data()
+        return render(request, self.template_name, data)
+
+
+    def post(self, request, *args, **kwargs):
+        data = dict()
+        data['version'] = current_version
+        holidays_without_fiscal_year = ACPHoliday.objects.filter(fiscal_year=0)
+        for holiday in holidays_without_fiscal_year:
+            fy = FiscalYear.create_from_date(holiday.date)
+            holiday.fiscal_year = fy.year
+            holiday.save()
+        data['years'] = self._get_years_data()
+        return render(request, self.template_name, data)
+
+    def _get_years_data(self):
+        data = ACPHoliday.objects.order_by('-fiscal_year').distinct('fiscal_year').values('fiscal_year')
+        return data
+
+
 
 class CalendarView(View):
     """
