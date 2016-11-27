@@ -1,4 +1,5 @@
 import json
+import operator
 import os
 from datetime import datetime
 
@@ -51,10 +52,13 @@ def get_holidays_dictionary():
     ordered_holidays = collections.OrderedDict(sorted(holiday_dictionary.items()))
     return ordered_holidays
 
+def get_key(object):
+    return object['date']
 
 def get_holidays_list():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     data_filename = os.path.join(dir_path, 'holiday_initial_data.json')
     with open(data_filename, encoding='utf-8') as json_data:
         holidays_list = json.load(json_data)
-    return holidays_list
+    ordered_holidays_list = sorted(holidays_list, key=operator.itemgetter('date'))
+    return ordered_holidays_list

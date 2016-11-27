@@ -11,6 +11,12 @@
         <input class="btn btn-primary" role="button" type="submit" value="{% trans 'Update Fiscal Year' %}">
     </form>
     <div>
+        <div class="row">
+            <div class="col-md-4">First date: {{ first_holiday.date }}</div>
+            <div class="col-md-4">Last date: {{ last_holiday.date }}</div>
+        </div>
+    </div>
+    <div>
         {% for year in years %}
         <div class="row">
             <div>
