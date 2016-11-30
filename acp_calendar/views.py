@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.utils import timezone
 
+from .utils import compare_initial_data_against_db
 from . import __version__ as current_version
 from .exceptions import ACPCalendarException
 from .models import ACPHoliday, FiscalYear
@@ -20,18 +21,25 @@ class HomeView(View):
         return render(request, self.template_name, data)
 
     def post(self, request, *args, **kwargs):
-        holidays_without_fiscal_year = ACPHoliday.objects.filter(fiscal_year=0)
-        for holiday in holidays_without_fiscal_year:
-            fy = FiscalYear.create_from_date(holiday.date)
-            holiday.fiscal_year = fy.year
-            holiday.save()
-        data = self._build_data_dict()
+        if 'update_fiscal_year' in request.POST:
+            holidays_without_fiscal_year = ACPHoliday.objects.filter(fiscal_year=0)
+            for holiday in holidays_without_fiscal_year:
+                fy = FiscalYear.create_from_date(holiday.date)
+                holiday.fiscal_year = fy.year
+                holiday.save()
+            data = self._build_data_dict()
+        elif 'check_initial_data' in request.POST:
+            not_found = compare_initial_data_against_db()
+            data = self._build_data_dict()
+            data['not_found'] = not_found
         return render(request, self.template_name, data)
+
 
     def _build_data_dict(self):
         data = dict()
-        data['first_holiday'] = ACPHoliday.objects.order_by('fiscal_year').first()
-        data['last_holiday'] = ACPHoliday.objects.order_by('fiscal_year').last()
+        data['first_holiday'] = ACPHoliday.objects.first()
+        data['last_holiday'] = ACPHoliday.objects.last()
+        data['holiday_count'] = ACPHoliday.objects.count()
         data['version'] = current_version
         data['years'] = ACPHoliday.objects.order_by('-fiscal_year').distinct('fiscal_year').values('fiscal_year')
         return data

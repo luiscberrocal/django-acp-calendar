@@ -8,12 +8,16 @@
     <h2>Fiscal Years</h2>
     <form action="" method="post">
         {% csrf_token %}
-        <input class="btn btn-primary" role="button" type="submit" value="{% trans 'Update Fiscal Year' %}">
+        <input class="btn btn-primary" role="button" type="submit" name="update_fiscal_year"
+               value="{% trans 'Update Fiscal Year' %}">
+        <input class="btn btn-primary" role="button" type="submit"  name="check_initial_data"
+               value="{% trans 'Check Initial Data' %}">
     </form>
     <div>
         <div class="row">
             <div class="col-md-4">First date: {{ first_holiday.date }}</div>
             <div class="col-md-4">Last date: {{ last_holiday.date }}</div>
+            <div class="col-md-4">{% trans 'Holiday count' %}: {{ holiday_count }}</div>
         </div>
     </div>
     <div>
@@ -27,6 +31,15 @@
         </div>
         {% endfor %}
     </div>
-
+    {% for not_loaded in not_found %}
+        <div class="row">
+            <div class="col-md-4">
+                {{ not_loaded.date }}
+            </div>
+        <div class="col-md-4">
+                {{ not_loaded.holiday_type }}
+            </div>
+        </div>
+    {% endfor %}
     <div class="version">Version: {{ version }}</div>
 {% endblock content %}
