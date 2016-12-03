@@ -97,6 +97,7 @@ class ACPHoliday(models.Model):
     """
     date = models.DateField(_('Date'), unique=True)
     holiday_type = models.ForeignKey(HolidayType, verbose_name=_('Holiday type'))
+    fiscal_year = models.IntegerField(_('fiscal year'), default=0)
 
     def __str__(self):
         return '{0} {1}'.format(self.date.strftime(app_settings.DATE_FORMAT), self.holiday_type)
