@@ -56,6 +56,6 @@ def build_fake_initial_data_json(holiday_count=2):
         last_holiday = {'date': new_date.strftime(app_settings.LOAD_DATE_FORMAT), 'holiday_type': 'navidad'}
         holidays.append(last_holiday)
     with open(data_filename, 'w') as outfile:
-        json.dump(holidays, outfile)
+        json.dump(holidays, outfile, indent=4)
     return data_filename
 

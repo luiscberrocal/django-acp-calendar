@@ -28,7 +28,7 @@ class AppSettings(object):
     def INITIAL_DATA_FILENAME(self):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         data_filename = os.path.join(dir_path, 'holiday_initial_data.json')
-        return data_filename
+        return self._settings('INITIAL_DATA_FILENAME', data_filename)
 
 # Ugly? Guido recommends this himself ...
 # http://mail.python.org/pipermail/python-ideas/2012-May/014969.html
