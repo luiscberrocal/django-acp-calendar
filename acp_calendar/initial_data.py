@@ -1,6 +1,8 @@
 import json
+import operator
 import os
 from datetime import datetime
+from django.conf import settings
 
 import collections
 
@@ -52,9 +54,18 @@ def get_holidays_dictionary():
     return ordered_holidays
 
 
-def get_holidays_list():
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    data_filename = os.path.join(dir_path, 'holiday_initial_data.json')
+def get_key(object):
+    return object['date']
+
+
+def get_holidays_list(source_json_file = None):
+    if source_json_file is None:
+        data_filename = app_settings.INITIAL_DATA_FILENAME
+    elif source_json_file is not None and settings.DEBUG:
+        data_filename = source_json_file
+    else:
+        raise ValueError('Cannot change json source')
     with open(data_filename, encoding='utf-8') as json_data:
         holidays_list = json.load(json_data)
-    return holidays_list
+    ordered_holidays_list = sorted(holidays_list, key=operator.itemgetter('date'))
+    return ordered_holidays_list
