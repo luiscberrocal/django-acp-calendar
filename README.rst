@@ -6,7 +6,7 @@ ACP-Calendar
     :target: https://badge.fury.io/py/acp-calendar
 
 .. image:: https://api.travis-ci.org/luiscberrocal/django-acp-calendar.svg?branch=master
-    :target: https://travis-ci.org/luiscberrocal/acp-calendar
+    :target: https://travis-ci.org/luiscberrocal/django-acp-calendar
 
 .. image:: https://coveralls.io/repos/github/luiscberrocal/django-acp-calendar/badge.svg?branch=master
     :target: https://coveralls.io/github/luiscberrocal/django-acp-calendar?branch=master
@@ -26,6 +26,16 @@ Documentation
 =============
 
 The full documentation is at http://django-acp-calendar.readthedocs.io/.
+
+Requirements
+=============
+
+
+Requires
+
+    * Pyton 3.4 or 3.5
+    * Django 1.8.15, 1.9.10 or 1.10.x.
+
 
 Quickstart
 ==========
