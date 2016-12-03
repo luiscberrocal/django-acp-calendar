@@ -9,3 +9,9 @@ The ``CalendarView`` View
 
 .. autoclass:: acp_calendar.views.CalendarView
    :members:
+
+The ``Calculator`` View
+-------------------------------
+
+.. autoclass:: acp_calendar.views.CalculatorView
+   :members:

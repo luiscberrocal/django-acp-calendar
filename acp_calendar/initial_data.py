@@ -53,8 +53,10 @@ def get_holidays_dictionary():
     ordered_holidays = collections.OrderedDict(sorted(holiday_dictionary.items()))
     return ordered_holidays
 
+
 def get_key(object):
     return object['date']
+
 
 def get_holidays_list(source_json_file = None):
     if source_json_file is None:

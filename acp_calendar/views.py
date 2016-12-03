@@ -83,6 +83,9 @@ class CalendarView(View):
 
 
 class CalculatorView(View):
+    """
+    View to calculate the amount of working day between two dates.
+    """
 
     template_name = 'acp_calendar/calculator.html'
 
