@@ -4,15 +4,14 @@ from io import StringIO
 import environ
 from django.core.management import call_command
 from django.test import TestCase
+from django.test import override_settings
 
+from acp_calendar.initial_data import get_holidays_list
 from acp_calendar.models import ACPHoliday, HolidayType
-from .utils import add_date_to_filename
+from .utils import add_date_to_filename, TestOutputMixin
 
 
-class TestACPHolidayCommand(TestCase):
-
-    clean_output = True
-
+class TestACPHolidayCommand(TestCase, TestOutputMixin):
 
     def test_list_initial(self):
         content = StringIO()
@@ -33,19 +32,29 @@ class TestACPHolidayCommand(TestCase):
         self.assertEqual('Found 133 in initials', results[-2:-1][0])
         self.assertEqual('\t[-] mártires                       2006-01-09', results[3:4][0])
 
+    @override_settings(DEBUG=True)
     def test_export_holidays(self):
         content = StringIO()
-        root_dir = environ.Path(__file__) - 2
-        output_dir = str(root_dir.path('output'))
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        filename = os.path.join(output_dir, 'holidays.json')
-        dated_filename = add_date_to_filename(filename)
+        # root_dir = environ.Path(__file__) - 2
+        # output_dir = str(root_dir.path('output'))
+        # if not os.path.exists(output_dir):
+        #     os.makedirs(output_dir)
+        # filename = os.path.join(output_dir, 'holidays.json')
+        dated_filename = self.get_dated_output_filename('holidays.json')
         call_command('acp_holidays', export_filename=dated_filename, stdout=content)
         self.assertTrue(os.path.exists(dated_filename))
-        if self.clean_output:
-            os.remove(dated_filename)
-            self.assertFalse(os.path.exists(dated_filename))
+        results = self.get_results(content)
+        expected = 'Wrote {} holidays to {}'.format(133, dated_filename)
+        self.assertEqual(expected, results[0])
+
+        holidays_in_json = get_holidays_list(dated_filename)
+        self.assertEqual('2006-01-01', holidays_in_json[0]['date'])
+        self.assertEqual('2017-12-25', holidays_in_json[-1]['date'])
+        self.assertEqual(133, len(holidays_in_json))
+        self.clean_output_folder(dated_filename)
+        # if self.clean_output:
+        #     os.remove(dated_filename)
+        #     self.assertFalse(os.path.exists(dated_filename))
 
     def test_update_initial_test(self):
         content = StringIO()
@@ -72,8 +81,6 @@ class TestACPHolidayCommand(TestCase):
         call_command('acp_holidays', update_initial=True, stdout=content)
         results = self.get_results(content)
         self.assertEqual(12, HolidayType.objects.count())
-
-
 
     def get_results(self, content):
         content.seek(0)
