@@ -23,11 +23,7 @@ class HomeView(View):
 
     def post(self, request, *args, **kwargs):
         if 'update_fiscal_year' in request.POST:
-            holidays_without_fiscal_year = ACPHoliday.objects.filter(fiscal_year=0)
-            for holiday in holidays_without_fiscal_year:
-                fy = FiscalYear.create_from_date(holiday.date)
-                holiday.fiscal_year = fy.year
-                holiday.save()
+            ACPHoliday.objects.update_fiscal_years()
             data = self._build_data_dict()
         elif 'check_initial_data' in request.POST:
             not_found = compare_initial_data_against_db()

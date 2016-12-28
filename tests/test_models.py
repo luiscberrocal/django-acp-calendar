@@ -13,6 +13,8 @@ import os
 from django.test import TestCase
 from unittest.mock import patch as mock_patch
 
+from django.test import override_settings
+
 from acp_calendar.initial_data import get_holiday_type_list, get_holidays_list
 from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear, ACPCalendarException
 
@@ -203,10 +205,35 @@ class TestACPHoliday(TestOutputMixin, TestCase):
         except ACPCalendarException as e:
             self.assertEqual('Dates must be either string or date objects', str(e))
 
+    @override_settings(DEBUG=True)
     def test_write_json(self):
-        filename = self.get_dated_output_filename('test_write_json.json')
-        results = ACPHoliday.objects.all().write_json(filename)
+        dated_filename = self.get_dated_output_filename('test_write_json.json')
+        results = ACPHoliday.objects.all().write_json(dated_filename)
         self.assertEqual(133, results.count())
-        self.assertTrue(os.path.exists(filename))
+        self.assertTrue(os.path.exists(dated_filename))
+
+        holidays_in_json = get_holidays_list(dated_filename)
+        self.assertEqual('2006-01-01', holidays_in_json[0]['date'])
+        self.assertEqual('2017-12-25', holidays_in_json[-1]['date'])
+        self.assertEqual(133, len(holidays_in_json))
+        #self.clean_output = False
+        self.clean_output_folder(dated_filename)
+
+    @override_settings(DEBUG=True)
+    def test_write_json_filter(self):
+        dated_filename = self.get_dated_output_filename('test_write_json_filter.json')
+        ACPHoliday.objects.update_fiscal_years()
+        results = ACPHoliday.objects.filter(fiscal_year=2015).write_json(dated_filename)
+        self.assertEqual(11, results.count())
+        self.assertTrue(os.path.exists(dated_filename))
+
+        holidays_in_json = get_holidays_list(dated_filename)
+        self.assertEqual('2014-11-03', holidays_in_json[0]['date'])
+        self.assertEqual('2015-05-01', holidays_in_json[-1]['date'])
+        self.assertEqual(11, len(holidays_in_json))
         self.clean_output = False
-        self.clean_output_folder(filename)
+        self.clean_output_folder(dated_filename)
+
+    # def test_filter(self):
+    #     results = ACPHoliday.objects.filter(fiscal_year=2015)
+    #     self.assertEqual(5, results.count())

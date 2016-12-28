@@ -1,6 +1,8 @@
 import json
 
 from django.db import models
+
+
 from . import app_settings
 
 class ACPHolidayQuerySet(models.QuerySet):
@@ -23,3 +25,12 @@ class ACPHolidayManager(models.Manager):
 
     def get_queryset(self):
         return ACPHolidayQuerySet(self.model, using=self._db)
+
+    def update_fiscal_years(self):
+        from .models import FiscalYear
+        holidays_without_fiscal_year = self.filter(fiscal_year=0)
+        for holiday in holidays_without_fiscal_year:
+            fy = FiscalYear.create_from_date(holiday.date)
+            holiday.fiscal_year = fy.year
+            holiday.save()
+        return holidays_without_fiscal_year
