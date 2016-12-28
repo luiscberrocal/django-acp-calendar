@@ -12,6 +12,7 @@ from .models import ACPHoliday, FiscalYear
 from \
     .forms import CalculatorForm
 
+
 class HomeView(View):
 
     template_name = 'acp_calendar/home.html'
@@ -34,16 +35,16 @@ class HomeView(View):
             data['not_found'] = not_found
         return render(request, self.template_name, data)
 
-
     def _build_data_dict(self):
         data = dict()
         data['first_holiday'] = ACPHoliday.objects.first()
         data['last_holiday'] = ACPHoliday.objects.last()
         data['holiday_count'] = ACPHoliday.objects.count()
         data['version'] = current_version
-        data['years'] = ACPHoliday.objects.order_by('-fiscal_year').distinct('fiscal_year').values('fiscal_year')
+        #OrderNotes.objects.filter(item=item).values_list('shared_note', flat=True).distinct()
+        #data['years'] = ACPHoliday.objects.order_by('-fiscal_year').distinct('fiscal_year').values('fiscal_year')
+        data['years'] = ACPHoliday.objects.order_by('-fiscal_year').values_list('fiscal_year', flat=True).distinct()
         return data
-
 
 
 class CalendarView(View):

@@ -21,6 +21,7 @@
         </div>
     </div>
     <div>
+      {% if years.count == 0 %}
         {% for year in years %}
         <div class="row">
             <div>
@@ -30,6 +31,7 @@
             </div>
         </div>
         {% endfor %}
+      {% endif %}
     </div>
     {% for not_loaded in not_found %}
         <div class="row">
