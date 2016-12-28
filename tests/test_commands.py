@@ -4,6 +4,7 @@ from io import StringIO
 import environ
 from django.core.management import call_command
 from django.test import TestCase
+from django.test import override_settings
 
 from acp_calendar.initial_data import get_holidays_list
 from acp_calendar.models import ACPHoliday, HolidayType
@@ -34,6 +35,7 @@ class TestACPHolidayCommand(TestCase):
         self.assertEqual('Found 133 in initials', results[-2:-1][0])
         self.assertEqual('\t[-] mártires                       2006-01-09', results[3:4][0])
 
+    @override_settings(DEBUG=True)
     def test_export_holidays(self):
         content = StringIO()
         root_dir = environ.Path(__file__) - 2
@@ -48,8 +50,9 @@ class TestACPHolidayCommand(TestCase):
         expected = 'Wrote {} holidays to {}'.format(133, dated_filename)
         self.assertEqual(expected, results[0])
 
-        #holidays_in_json = get_holidays_list(dated_filename)
-        #self.assertEqual('', holidays_in_json[1])
+        holidays_in_json = get_holidays_list(dated_filename)
+        self.assertEqual('2006-01-01', holidays_in_json[0]['date'])
+        self.assertEqual('2017-12-25', holidays_in_json[-1]['date'])
         if self.clean_output:
             os.remove(dated_filename)
             self.assertFalse(os.path.exists(dated_filename))
