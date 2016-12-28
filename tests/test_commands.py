@@ -5,6 +5,7 @@ import environ
 from django.core.management import call_command
 from django.test import TestCase
 
+from acp_calendar.initial_data import get_holidays_list
 from acp_calendar.models import ACPHoliday, HolidayType
 from .utils import add_date_to_filename
 
@@ -43,6 +44,12 @@ class TestACPHolidayCommand(TestCase):
         dated_filename = add_date_to_filename(filename)
         call_command('acp_holidays', export_filename=dated_filename, stdout=content)
         self.assertTrue(os.path.exists(dated_filename))
+        results = self.get_results(content)
+        expected = 'Wrote {} holidays to {}'.format(133, dated_filename)
+        self.assertEqual(expected, results[0])
+
+        #holidays_in_json = get_holidays_list(dated_filename)
+        #self.assertEqual('', holidays_in_json[1])
         if self.clean_output:
             os.remove(dated_filename)
             self.assertFalse(os.path.exists(dated_filename))

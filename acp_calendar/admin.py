@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from acp_calendar.models import HolidayType, ACPHoliday
+from .models import HolidayType, ACPHoliday
 
 
 class HolidayTypeAdmin(admin.ModelAdmin):

@@ -43,7 +43,9 @@ class HomeView(View):
         data['version'] = current_version
         #OrderNotes.objects.filter(item=item).values_list('shared_note', flat=True).distinct()
         #data['years'] = ACPHoliday.objects.order_by('-fiscal_year').distinct('fiscal_year').values('fiscal_year')
-        data['years'] = ACPHoliday.objects.order_by('-fiscal_year').values_list('fiscal_year', flat=True).distinct()
+        data['years'] = ACPHoliday.objects.exclude(fiscal_year=0).order_by('-fiscal_year').values_list('fiscal_year', flat=True).distinct()
+        # if len(data['years']) == 1 and data['years'][0] == 0:
+        #     data['years'] = []
         return data
 
 

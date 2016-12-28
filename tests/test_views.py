@@ -25,7 +25,17 @@ class TestHomeView(TestCase):
         self.assertEqual('2017-12-25', response.context['last_holiday'].date.strftime('%Y-%m-%d'))
         self.assertEqual(133, response.context['holiday_count'])
         self.assertEqual(version_num, response.context['version'])
-        self.assertEqual(1, len(response.context['years']))
+        self.assertEqual(0, len(response.context['years']))
+
+    def test_post_update_fiscal_year(self):
+        url = reverse('calendar:home')
+        response = self.client.post(url, data={'update_fiscal_year': 'Update Fiscal Year'})
+        self.assertEqual(13, len(response.context['years']))
+
+    def test_check_initial_data(self):
+        url = reverse('calendar:home')
+        response = self.client.post(url, data={'check_initial_data': 'Check Initial Data'})
+        self.assertEqual(0, len(response.context['not_found']))
 
 
 class TestACPHolidayListAPIView(TestCase):

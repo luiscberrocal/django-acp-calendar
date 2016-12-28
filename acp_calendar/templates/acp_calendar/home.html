@@ -21,12 +21,12 @@
         </div>
     </div>
     <div>
-      {% if years.count == 0 %}
+      {% if years.count != 0 %}
         {% for year in years %}
         <div class="row">
             <div>
-                <a href="{% url 'calendar:fiscal-year-calendar'  year.fiscal_year %}">
-                Fiscal Year {{ year.fiscal_year }}
+                <a href="{% url 'calendar:fiscal-year-calendar'  year %}">
+                Fiscal Year {{ year }}
             </a>
             </div>
         </div>
