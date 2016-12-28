@@ -1,9 +1,8 @@
 import json
 
 from django.db import models
-
-
 from . import app_settings
+
 
 class ACPHolidayQuerySet(models.QuerySet):
 
@@ -20,6 +19,7 @@ class ACPHolidayQuerySet(models.QuerySet):
             json.dump(holidays, outfile, indent=4, ensure_ascii=False)
 
         return self
+
 
 class ACPHolidayManager(models.Manager):
 

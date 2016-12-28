@@ -108,16 +108,8 @@ class Command(BaseCommand):
 
         :param filename: JSON file to save database content
         """
-        holidays = list()
-        db_holidays = ACPHoliday.objects.all()
-        for db_holiday in db_holidays:
-            holiday_dict = dict()
-            holiday_dict['date'] = db_holiday.date.strftime(app_settings.LOAD_DATE_FORMAT)
-            holiday_dict['holiday_type'] = db_holiday.holiday_type.short_name
-            holidays.append(holiday_dict)
 
-        with open(filename, 'w', encoding='utf-8') as outfile:
-            json.dump(holidays, outfile, indent=4, ensure_ascii=False)
+        db_holidays = ACPHoliday.objects.all().write_json(filename)
         self.stdout.write('Wrote %d holidays to %s' % (len(db_holidays), filename))
 
     def _list_initial_data(self):
