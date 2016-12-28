@@ -1,4 +1,5 @@
 import json
+import environ
 import os
 
 from django.utils import timezone
@@ -8,6 +9,22 @@ from acp_calendar import app_settings
 from acp_calendar.initial_data import get_holidays_list
 from acp_calendar.models import HolidayType
 
+class TestOutputMixin(object):
+    clean_output = True
+
+    def get_dated_output_filename(self, base_filename):
+        root_dir = environ.Path(__file__) - 2
+        output_dir = str(root_dir.path('output'))
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        filename = os.path.join(output_dir, base_filename)
+        dated_filename = add_date_to_filename(filename)
+        return dated_filename
+
+    def clean_output_folder(self, dated_filename):
+        if self.clean_output:
+            os.remove(dated_filename)
+            self.assertFalse(os.path.exists(dated_filename))
 
 def add_date_to_filename(filename, **kwargs):
     new_filename = dict()

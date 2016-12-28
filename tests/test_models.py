@@ -8,6 +8,7 @@ test_acp-calendar
 Tests for `acp-calendar` models module.
 """
 import datetime
+import os
 
 from django.test import TestCase
 from unittest.mock import patch as mock_patch
@@ -17,6 +18,8 @@ from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear, ACPCalendar
 
 import datetime
 import mock
+
+from .utils import TestOutputMixin
 
 real_datetime_class = datetime.datetime
 
@@ -44,6 +47,7 @@ def mock_datetime(target, datetime_module):
     MockedDatetime = DatetimeSubclassMeta('datetime', (BaseMockedDatetime,), {})
 
     return mock.patch.object(datetime_module, 'datetime', MockedDatetime)
+
 
 class TestFiscalYear(TestCase):
 
@@ -79,7 +83,6 @@ class TestFiscalYear(TestCase):
             self.assertEqual('FY17', str(fy))
 
 
-
 class TestHolidayType(TestCase):
 
     def setUp(self):
@@ -100,7 +103,7 @@ class TestHolidayType(TestCase):
         pass
 
 
-class TestACPHoliday(TestCase):
+class TestACPHoliday(TestOutputMixin, TestCase):
 
     def setUp(self):
         pass
@@ -199,3 +202,11 @@ class TestACPHoliday(TestCase):
             self.fail('should throw error for dates must be either string or date objects')
         except ACPCalendarException as e:
             self.assertEqual('Dates must be either string or date objects', str(e))
+
+    def test_write_json(self):
+        filename = self.get_dated_output_filename('test_write_json.json')
+        results = ACPHoliday.objects.all().write_json(filename)
+        self.assertEqual(133, results.count())
+        self.assertTrue(os.path.exists(filename))
+        self.clean_output = False
+        self.clean_output_folder(filename)
