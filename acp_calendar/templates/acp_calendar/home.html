@@ -22,15 +22,17 @@
 </div>
 <div>
   {% if years.count != 0 %}
-  {% for year in years %}
   <div class="row">
-    <div>
+  {% for year in years %}
+
+    <div class="col-md-3">
       <a href="{% url 'calendar:fiscal-year-calendar'  year %}">
         Fiscal Year {{ year }}
       </a>
     </div>
-  </div>
+
   {% endfor %}
+  </div>
   {% endif %}
 </div>
 {% for not_loaded in not_found %}
@@ -62,6 +64,11 @@
 <div>
   <a href="{% url 'calendar:calendar-api:working_delta' '2015-11-01' 30%}">
     Date for 30 working days after Nov. 1st 2015
+  </a>
+</div>
+<div>
+  <a href="{% url 'calendar:calendar-api:working_days' '2015-11-01' '2015-12-31' %}">
+    Working days between  Nov. 1st 2015 and Dec. 31st 2015
   </a>
 </div>
 <div class="version">Version: {{ version }}</div>
