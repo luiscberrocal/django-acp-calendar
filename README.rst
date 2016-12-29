@@ -233,6 +233,11 @@ Check https://testpypi.python.org/pypi/acp-calendar/
 
     python setup.py sdist upload -r pypi
 
+Development
+-----------
+
+There is a project to use to develop and view the acp_calendar app it is at https://github.com/luiscberrocal/acp-calendar-dev-project
+
 
 Credits
 -------

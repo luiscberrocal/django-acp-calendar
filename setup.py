@@ -54,7 +54,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'djangorestframework==3.5.3',
-        'pytz==2016.7',
+        'pytz==2016.10',
     ],
     license="BSD",
     zip_safe=False,
