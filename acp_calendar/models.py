@@ -4,6 +4,7 @@ from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
+from .managers import ACPHolidayManager
 from . import app_settings
 from .exceptions import ACPCalendarException
 
@@ -104,6 +105,8 @@ class ACPHoliday(models.Model):
 
     class Meta:
         ordering = ('date',)
+
+    objects = ACPHolidayManager()
 
     @staticmethod
     def validate_dates(start_date, end_date):

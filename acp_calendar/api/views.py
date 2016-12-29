@@ -17,7 +17,8 @@ class ACPHolidayListAPIView(ListAPIView):
         else:
             return ACPHoliday.objects.all()
 
-class CalendarCalculatonsView(views.APIView):
+
+class CalendarCalculationsView(views.APIView):
 
     def get(self, request, **kwargs):
 

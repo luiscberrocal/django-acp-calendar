@@ -4,11 +4,38 @@ from unittest.mock import patch, Mock
 
 import pytz
 from django.conf import settings
+from django.conf.urls import url, include
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test import override_settings
 
 from acp_calendar.forms import CalculatorForm
 from acp_calendar.models import ACPHoliday, FiscalYear
+from acp_calendar import __version__ as version_num
+
+urlpatterns = [url(r'^calendar/', include('acp_calendar.urls', namespace='calendar')), ]
+
+@override_settings(ROOT_URLCONF=__name__)
+class TestHomeView(TestCase):
+
+    def test_get(self):
+        url = reverse('calendar:home')
+        response = self.client.get(url)
+        self.assertEqual('2006-01-01', response.context['first_holiday'].date.strftime('%Y-%m-%d'))
+        self.assertEqual('2017-12-25', response.context['last_holiday'].date.strftime('%Y-%m-%d'))
+        self.assertEqual(133, response.context['holiday_count'])
+        self.assertEqual(version_num, response.context['version'])
+        self.assertEqual(0, len(response.context['years']))
+
+    def test_post_update_fiscal_year(self):
+        url = reverse('calendar:home')
+        response = self.client.post(url, data={'update_fiscal_year': 'Update Fiscal Year'})
+        self.assertEqual(13, len(response.context['years']))
+
+    def test_check_initial_data(self):
+        url = reverse('calendar:home')
+        response = self.client.post(url, data={'check_initial_data': 'Check Initial Data'})
+        self.assertEqual(0, len(response.context['not_found']))
 
 
 class TestACPHolidayListAPIView(TestCase):
@@ -28,6 +55,7 @@ class TestACPHolidayListAPIView(TestCase):
         self.assertEqual(11, len(results))
         self.assertEqual(11, data['count'])
         self.assertEqual('2013-01-01', results[0]['date'])
+
 
 class TestCalendarCalculationsView(TestCase):
 
@@ -123,7 +151,6 @@ class TestCalendarView(TestCase):
         self.assertRegex(response.context['version'], self.version_regex)
         self.assertEqual(year, response.context['fiscal_year'])
         self.assertEqual('End date exceed the last registered holiday', response.context['errors'])
-
 
 
 class TestCalulatorView(TestCase):

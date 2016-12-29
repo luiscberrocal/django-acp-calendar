@@ -1,4 +1,4 @@
 django==1.10.4
 djangorestframework==3.5.3
-pytz==2016.7
+pytz==2016.10
 # Additional requirements go here
