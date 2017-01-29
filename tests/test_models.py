@@ -231,7 +231,7 @@ class TestACPHoliday(TestOutputMixin, TestCase):
         self.assertEqual('2014-11-03', holidays_in_json[0]['date'])
         self.assertEqual('2015-05-01', holidays_in_json[-1]['date'])
         self.assertEqual(11, len(holidays_in_json))
-        self.clean_output = False
+        #self.clean_output = False
         self.clean_output_folder(dated_filename)
 
     # def test_filter(self):

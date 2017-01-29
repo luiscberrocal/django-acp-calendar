@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'css/acp_calendar.css' %}" rel="stylesheet">
+{% endblock css %}
+{% block content %}
+    <h2>{% trans 'Panama Canal Holidays' %}</h2>
+    <div>
+        {% for acp_holiday in object_list %}
+            <div>{{ acp_holiday.date|date }} - {{ acp_holiday.holiday_type.name }} - {{ acp_holiday.fiscal_year }}</div>
+        {% empty %}
+            <div>No articles yet.</div>
+        {% endfor %}
+        {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li>
+                            <a href="{% url 'calendar:holiday-list' %}?page={{ page_obj.previous_page_number }}"
+                                aria-label="Previous">
+                                 <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="active">
+                        <a href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li><a href="{% url 'calendar:holiday-list' %}?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                 <span aria-hidden="true">&raquo;</span></a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+
+    <div class="version">Version: {{ version }}</div>
+{% endblock content %}

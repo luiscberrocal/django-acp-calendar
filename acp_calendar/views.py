@@ -2,6 +2,7 @@ from datetime import date
 from django.contrib import messages
 from django.db.models import Count
 from django.shortcuts import render
+from django.views.generic import ListView
 from django.views.generic import View
 from django.utils import timezone
 
@@ -111,4 +112,17 @@ class CalculatorView(View):
                 return render(request, self.template_name, data)
         else:
             return render(request, self.template_name, data)
+
+
+class ACPHolidayListView(ListView):
+    model = ACPHoliday
+    paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+        context = super(ACPHolidayListView,self).get_context_data(**kwargs)
+        context['version'] = current_version
+        return context
+
+
+
 
