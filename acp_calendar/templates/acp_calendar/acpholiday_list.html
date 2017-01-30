@@ -22,9 +22,16 @@
                                  <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
+                        {% else %}
+                         <li class="disabled">
+                            <a href="#"
+                                aria-label="Previous">
+                                 <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
                     {% endif %}
                     <li class="active">
-                        <a href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+                        <a href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
                     </li>
                     {% if page_obj.has_next %}
                         <li><a href="{% url 'calendar:holiday-list' %}?page={{ page_obj.next_page_number }}" aria-label="Next">
