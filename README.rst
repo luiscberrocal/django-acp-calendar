@@ -34,7 +34,7 @@ Requirements
 Requires
 
     * Pyton 3.4 or 3.5
-    * Django 1.8.15, 1.9.10 or 1.10.x.
+    * Django 1.8.15, 1.9.10, 1.10.7 or 1.11
 
 
 Quickstart
