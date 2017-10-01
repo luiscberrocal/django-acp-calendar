@@ -1,6 +1,7 @@
 import os
 
 
+# noinspection PyPep8Naming
 class AppSettings(object):
     def __init__(self, prefix):
         self.prefix = prefix
