@@ -47,3 +47,5 @@ output/*/index.html
 docs/_build
 output
 acp-calendar.log
+example.log
+acp_calendar.sqlite3

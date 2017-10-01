@@ -9,19 +9,20 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
-import os
 
-import django
+import os
+import logging
 import environ
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ROOT_DIR = environ.Path(__file__) - 2  # (pmp_shield/config/settings/common.py - 3 = pmp_shield/)
-APPS_DIR = ROOT_DIR.path('acp_calendar')
+ROOT_DIR = environ.Path(__file__) - 3  # (pmp_shield/config/settings/common.py - 3 = pmp_shield/)
+APPS_DIR = ROOT_DIR.path('example')
 
 TEST_OUTPUT_PATH = ROOT_DIR.path('output').root
 TEST_DATA_PATH = ROOT_DIR.path('test_data').root
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -42,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'acp_calendar',
+
+    'acp_calendar.apps.ACPCalendarConfig',
+
     # if your app has other dependencies that need to be added to the site
     # they should be added here
 ]
@@ -58,34 +61,26 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'acp_calendar.urls'
+ROOT_URLCONF = 'example.example.urls'
 
-if django.VERSION > (1, 11):
-    TEMPLATES = [
-        {
-            'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [str(APPS_DIR.path('templates')), ],
-            'APP_DIRS': True,
-            'OPTIONS': {
-                'context_processors': [
-                    'django.template.context_processors.debug',
-                    'django.template.context_processors.request',
-                    'django.contrib.auth.context_processors.auth',
-                    'django.contrib.messages.context_processors.messages',
-                ],
-            },
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [str(APPS_DIR.path('templates')),
+                 str(ROOT_DIR.path('acp_calendar', 'templates')), ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
         },
-    ]
-else:
-    TEMPLATES = [
-        {
-            'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [str(APPS_DIR.path('templates')), ],
-            'APP_DIRS': True,
-            'OPTIONS': {},
-        },
-    ]
-# WSGI_APPLICATION = 'example.wsgi.application'
+    },
+]
+
+WSGI_APPLICATION = 'example.example.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -93,7 +88,7 @@ else:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(APPS_DIR.root, 'acp_calendar.sqlite3'),
+        'NAME': os.path.join(APPS_DIR.root, 'example_db_2.sqlite3'),
     }
 }
 
@@ -146,6 +141,7 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s:%(lineno)s '
                       '%(process)d %(thread)d %(message)s',
             'datefmt': '%Y-%m-%d %H:%M',
+
         },
     },
     'handlers': {
@@ -157,7 +153,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'acp-calendar.log',
+            'filename': 'example.log',
         },
     },
     'loggers': {
