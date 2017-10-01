@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from unittest.mock import patch, Mock
 
+import django
 import pytz
 from django.conf import settings
 from django.conf.urls import url, include
@@ -197,8 +198,11 @@ class TestCalulatorView(TestCase):
         Asserts that exactly the given number of messages have been sent.
         From: http://stackoverflow.com/questions/2897609/how-can-i-unit-test-django-messages
         """
+        if django.VERSION > (1, 11):
+            actual_num = len(response.context['messages'])
+        else:
+            actual_num = len(response.wsgi_request._messages)
 
-        actual_num = len(response.context['messages'])
         if actual_num != expect_num:
             self.fail('Message count was %d, expected %d' %
                 (actual_num, expect_num))
@@ -208,8 +212,10 @@ class TestCalulatorView(TestCase):
         Asserts that there is exactly one message containing the given text.
         From: http://stackoverflow.com/questions/2897609/how-can-i-unit-test-django-messages
         """
-
-        messages = response.context['messages']
+        if django.VERSION > (1, 11):
+            messages = response.context['messages']
+        else:
+            messages = response.wsgi_request._messages
 
         matches = [m for m in messages if text in m.message]
 
