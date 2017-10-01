@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from .serializers import ACPHolidaySerializer, StandardResultsSetPagination
 from ..models import ACPHoliday, ACPCalendarException
 
+
 class ACPHolidayListAPIView(ListAPIView):
-    #queryset = ACPHoliday.objects.all()
+    # queryset = ACPHoliday.objects.all()
     serializer_class = ACPHolidaySerializer
     pagination_class = StandardResultsSetPagination
 
@@ -19,7 +20,6 @@ class ACPHolidayListAPIView(ListAPIView):
 
 
 class CalendarCalculationsView(views.APIView):
-
     def get(self, request, **kwargs):
 
         calculation = kwargs.pop('calculation', None)
@@ -35,7 +35,6 @@ class CalendarCalculationsView(views.APIView):
 
         return Response(data)
 
-
     def working_days(self, start_date, end_date):
         results = {'start_date': start_date,
                    'end_date': end_date,
@@ -48,7 +47,6 @@ class CalendarCalculationsView(views.APIView):
             results['error'] = str(e)
 
         return results
-
 
     def working_delta(self, start_date, days):
         results = {'start_date': start_date,
@@ -73,4 +71,3 @@ class CalendarCalculationsView(views.APIView):
         except ACPCalendarException as e:
             results['error'] = str(e)
         return results
-

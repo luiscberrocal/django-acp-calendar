@@ -33,7 +33,7 @@ Requirements
 
 Requires
 
-    * Pyton 3.4 or 3.5
+    * Python 3.4, 3.5 or 3.6
     * Django 1.8.15, 1.9.10, 1.10.7 or 1.11
 
 

@@ -7,7 +7,6 @@ from ..initial_data import load_data
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('acp_calendar', '0001_initial'),
     ]

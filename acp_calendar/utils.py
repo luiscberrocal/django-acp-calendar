@@ -1,8 +1,9 @@
-from . import app_settings
-from .models import ACPHoliday
-from .initial_data import get_holidays_list
 from datetime import datetime
+
 from . import app_settings
+from .initial_data import get_holidays_list
+from .models import ACPHoliday
+
 
 def compare_initial_data_against_db(initial_data_json=None):
     """
@@ -18,4 +19,3 @@ def compare_initial_data_against_db(initial_data_json=None):
         except ACPHoliday.DoesNotExist:
             not_found.append(holiday)
     return not_found
-

@@ -1,11 +1,11 @@
 import json
 
 from django.db import models
+
 from . import app_settings
 
 
 class ACPHolidayQuerySet(models.QuerySet):
-
     def write_json(self, filename):
         holidays = list()
         db_holidays = self
@@ -22,7 +22,6 @@ class ACPHolidayQuerySet(models.QuerySet):
 
 
 class ACPHolidayManager(models.Manager):
-
     def get_queryset(self):
         return ACPHolidayQuerySet(self.model, using=self._db)
 

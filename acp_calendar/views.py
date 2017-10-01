@@ -1,20 +1,19 @@
 from datetime import date
-from django.contrib import messages
-from django.db.models import Count
-from django.shortcuts import render
-from django.views.generic import View
-from django.utils import timezone
 
-from .utils import compare_initial_data_against_db
+from django.contrib import messages
+from django.shortcuts import render
+from django.utils import timezone
+from django.views.generic import View
+
 from . import __version__ as current_version
 from .exceptions import ACPCalendarException
-from .models import ACPHoliday, FiscalYear
 from \
     .forms import CalculatorForm
+from .models import ACPHoliday, FiscalYear
+from .utils import compare_initial_data_against_db
 
 
 class HomeView(View):
-
     template_name = 'acp_calendar/home.html'
 
     def get(self, request, *args, **kwargs):
@@ -37,9 +36,11 @@ class HomeView(View):
         data['last_holiday'] = ACPHoliday.objects.last()
         data['holiday_count'] = ACPHoliday.objects.count()
         data['version'] = current_version
-        #OrderNotes.objects.filter(item=item).values_list('shared_note', flat=True).distinct()
-        #data['years'] = ACPHoliday.objects.order_by('-fiscal_year').distinct('fiscal_year').values('fiscal_year')
-        data['years'] = ACPHoliday.objects.exclude(fiscal_year=0).order_by('-fiscal_year').values_list('fiscal_year', flat=True).distinct()
+        # OrderNotes.objects.filter(item=item).values_list('shared_note', flat=True).distinct()
+        # data['years'] = ACPHoliday.objects.order_by('-fiscal_year').distinct('fiscal_year').values('fiscal_year')
+        data['years'] = ACPHoliday.objects.exclude(fiscal_year=0).order_by(
+            '-fiscal_year'
+        ).values_list('fiscal_year', flat=True).distinct()
         # if len(data['years']) == 1 and data['years'][0] == 0:
         #     data['years'] = []
         return data
@@ -47,7 +48,7 @@ class HomeView(View):
 
 class CalendarView(View):
     """
-    View to generate a calendar for fiscal year containg the working days in every month
+    View to generate a calendar for fiscal year containing the working days in every month
     of the fiscal year.
     """
 
@@ -75,7 +76,8 @@ class CalendarView(View):
             else:
                 data['remaining_working_days_in_fiscal_year'] = 0
 
-            data['remaining_working_days_percentage'] = data['remaining_working_days_in_fiscal_year'] / data['working_days_in_fiscal_year'] *100
+            data['remaining_working_days_percentage'] = data['remaining_working_days_in_fiscal_year'] / data[
+                'working_days_in_fiscal_year'] * 100
         except ACPCalendarException as e:
             data['errors'] = str(e)
         return render(request, self.template_name, data)
@@ -107,8 +109,7 @@ class CalculatorView(View):
                 data['working_days'] = working_days
                 return render(request, self.template_name, data)
             except ACPCalendarException as e:
-                messages.add_message(request, messages.ERROR, str(e), extra_tags='dragonball')
+                messages.add_message(request, messages.ERROR, str(e))
                 return render(request, self.template_name, data)
         else:
             return render(request, self.template_name, data)
-

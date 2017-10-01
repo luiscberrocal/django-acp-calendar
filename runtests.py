@@ -1,90 +1,25 @@
+#!/usr/bin/env python
+# -*- coding: utf-8
+from __future__ import unicode_literals, absolute_import
+
+import os
 import sys
 
-try:
-    from django.conf import settings
-    from django.test.utils import get_runner
-
-    settings.configure(
-        DEBUG=True,
-        USE_TZ=True,
-        DATABASES={
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-            }
-        },
-        ROOT_URLCONF="acp_calendar.urls",
-        INSTALLED_APPS=[
-            "django.contrib.auth",
-            "django.contrib.contenttypes",
-            "django.contrib.sites",
-            "acp_calendar",
-        ],
-        SITE_ID=1,
-        MIDDLEWARE_CLASSES=(
-            'django.contrib.sessions.middleware.SessionMiddleware',
-            'django.contrib.messages.middleware.MessageMiddleware',
-        ),
-        MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage',
-        TEMPLATES = [
-    {
-        # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        'DIRS': [
-            'templates',
-        ],
-        'OPTIONS': {
-            # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
-            'debug': True,
-            # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
-            # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
-            'loaders': [
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-            ],
-            # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
-                # Your stuff: custom template context processors go here
-            ],
-        },
-    },
-],
-    )
-
-    try:
-        import django
-        setup = django.setup
-    except AttributeError:
-        pass
-    else:
-        setup()
-
-except ImportError:
-    import traceback
-    traceback.print_exc()
-    raise ImportError("To fix this error, run: pip install -r requirements-test.txt")
+import django
+from django.conf import settings
+from django.test.utils import get_runner
 
 
 def run_tests(*test_args):
     if not test_args:
         test_args = ['tests']
 
-    # Run tests
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
+    django.setup()
     TestRunner = get_runner(settings)
     test_runner = TestRunner()
-
     failures = test_runner.run_tests(test_args)
-
-    if failures:
-        sys.exit(bool(failures))
+    sys.exit(bool(failures))
 
 
 if __name__ == '__main__':
