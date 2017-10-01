@@ -53,7 +53,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'djangorestframework==3.6.2',
+        'djangorestframework==3.6.4',
         'pytz==2017.2',
     ],
     license="BSD",
