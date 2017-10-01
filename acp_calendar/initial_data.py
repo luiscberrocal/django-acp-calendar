@@ -1,14 +1,13 @@
+import collections
 import json
 import operator
-import os
 from datetime import datetime
+
 from django.conf import settings
 
-import collections
-
+from . import app_settings
 from .exceptions import ACPCalendarException
 
-from . import app_settings
 
 def load_data(apps, schema_editor):
     HolidayType = apps.get_model("acp_calendar", "HolidayType")
@@ -20,7 +19,7 @@ def load_data(apps, schema_editor):
         try:
             holiday_type = HolidayType.objects.get(short_name=holiday_data['holiday_type'])
             holiday_date = datetime.strptime(holiday_data['date'], app_settings.LOAD_DATE_FORMAT)
-            ACPHoliday.objects.create(date=holiday_date, holiday_type=holiday_type )
+            ACPHoliday.objects.create(date=holiday_date, holiday_type=holiday_type)
         except HolidayType.DoesNotExist:
             raise ACPCalendarException('Could not find a holiday type for %s' % holiday_data['holiday_type'])
 
@@ -58,7 +57,7 @@ def get_key(object):
     return object['date']
 
 
-def get_holidays_list(source_json_file = None):
+def get_holidays_list(source_json_file=None):
     if source_json_file is None:
         data_filename = app_settings.INITIAL_DATA_FILENAME
     elif source_json_file is not None and settings.DEBUG:
