@@ -9,9 +9,10 @@ Tests for `acp-calendar` models module.
 """
 import datetime
 import os
+from unittest import mock
 
 from django.test import TestCase
-from unittest.mock import patch as mock_patch
+
 
 from django.test import override_settings
 
@@ -19,7 +20,7 @@ from acp_calendar.initial_data import get_holiday_type_list, get_holidays_list
 from acp_calendar.models import HolidayType, ACPHoliday, FiscalYear, ACPCalendarException
 
 import datetime
-import mock
+
 
 from .utils import TestOutputMixin
 
@@ -53,6 +54,7 @@ def mock_datetime(target, datetime_module):
 
 class TestFiscalYear(TestCase):
 
+
     def test__create(self):
         fy = FiscalYear(2016)
         self.assertEqual('FY16', str(fy))
@@ -74,15 +76,16 @@ class TestFiscalYear(TestCase):
         self.assertEqual('FY14', str(fy))
 
     def test_create_from_date_datetime(self):
-        cdate = datetime.datetime(2013, 10, 1, 0,0,0)
+        cdate = datetime.datetime(2013, 10, 1, 0, 0, 0)
         fy = FiscalYear.create_from_date(cdate)
         self.assertEqual('FY14', str(fy))
 
-    def test_current_fiscal_year(self):
-        target = datetime.datetime(2016, 10, 1, 0,0,0)
-        with mock_datetime(target, datetime):
-            fy = FiscalYear.current_fiscal_year()
-            self.assertEqual('FY17', str(fy))
+    @mock.patch('django.utils.timezone.now')
+    def test_current_fiscal_year(self, mock_now):
+        mock_now.return_value = datetime.datetime(2013, 10, 1, 0, 0, 0)
+        fy = FiscalYear.current_fiscal_year()
+        self.assertEqual('FY14', str(fy))
+
 
 
 class TestHolidayType(TestCase):

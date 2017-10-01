@@ -3,7 +3,7 @@ from calendar import monthrange, IllegalMonthError
 from datetime import timedelta, date, datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-
+from django.utils import timezone
 from .managers import ACPHolidayManager
 from . import app_settings
 from .exceptions import ACPCalendarException
@@ -73,7 +73,7 @@ class FiscalYear(object):
         :param kwargs: Same kwargs as for the constructor
         :return: FiscalYear object for current date
         """
-        cdate = datetime.now().date()
+        cdate = timezone.now()
         return FiscalYear.create_from_date(cdate, **kwargs)
 
 class HolidayType(models.Model):
