@@ -49,3 +49,4 @@ output
 acp-calendar.log
 example.log
 acp_calendar.sqlite3
+geckodriver.log

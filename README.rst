@@ -236,8 +236,9 @@ Check https://testpypi.python.org/pypi/acp-calendar/
 Development
 -----------
 
-There is a project to use to develop and view the acp_calendar app it is at https://github.com/luiscberrocal/acp-calendar-dev-project
+The development project is in the ./example folder.
 
+To use it
 
 Credits
 -------
