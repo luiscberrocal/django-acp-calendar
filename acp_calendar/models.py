@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from calendar import monthrange, IllegalMonthError
 from datetime import timedelta, date, datetime
-from django.utils.translation import ugettext_lazy as _
-from django.db import models
 
-from .managers import ACPHolidayManager
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+
 from . import app_settings
 from .exceptions import ACPCalendarException
+from .managers import ACPHolidayManager
 
 
 class FiscalYear(object):
@@ -26,7 +28,7 @@ class FiscalYear(object):
         length which is also used in the str method
         """
         self.year = year
-        self.start_date = date(year-1, 10, 1)
+        self.start_date = date(year - 1, 10, 1)
         self.end_date = date(year, 9, 30)
         self.fy_format = {'display': kwargs.get('display', 'FY%s'),
                           'length': kwargs.get('length', 2)}
@@ -42,9 +44,9 @@ class FiscalYear(object):
         :return: a tuple containing 12 tuples. Each tuple contains 2 integer, the first one is the month the
         second one is the year.
         """
-        return ((10, self.year-1), (11, self.year-1), (12, self.year-1),
-                (1, self.year),(2, self.year),(3, self.year),(4, self.year),
-                (5, self.year),(6, self.year),(7, self.year),(8, self.year),
+        return ((10, self.year - 1), (11, self.year - 1), (12, self.year - 1),
+                (1, self.year), (2, self.year), (3, self.year), (4, self.year),
+                (5, self.year), (6, self.year), (7, self.year), (8, self.year),
                 (9, self.year))
 
     @staticmethod
@@ -73,8 +75,9 @@ class FiscalYear(object):
         :param kwargs: Same kwargs as for the constructor
         :return: FiscalYear object for current date
         """
-        cdate = datetime.now().date()
+        cdate = timezone.now()
         return FiscalYear.create_from_date(cdate, **kwargs)
+
 
 class HolidayType(models.Model):
     """
@@ -202,7 +205,7 @@ class ACPHoliday(models.Model):
         """
         start_date = ACPHoliday.convert_to_date(start_date)
         working_days = int(working_days)
-        first_guess = working_days + working_days/5*2 +4
+        first_guess = working_days + working_days / 5 * 2 + 4
         end_date = start_date + timedelta(days=first_guess)
         holidays = ACPHoliday.objects.filter(date__gte=start_date, date__lte=end_date)
         holiday_list = list()

@@ -45,6 +45,12 @@
   </div>
 </div>
 {% endfor %}
+    <h2>Utilities</h2>
+    <div>
+  <a href="{% url 'calendar:calculator' %}">
+    Working Days Calculator
+  </a>
+</div>
 <h2>API Calls</h2>
 <div>
   <a href="{% url 'calendar:calendar-api:holiday-list' %}">

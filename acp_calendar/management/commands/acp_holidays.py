@@ -1,14 +1,11 @@
-
 # -*- coding: utf-8 -*-
-import collections
-import json
 import datetime
+
 from django.core.management import BaseCommand
 
 from ... import app_settings
 from ...initial_data import get_holidays_dictionary, get_holiday_type_list, \
     get_holidays_list
-from ...exceptions import ACPCalendarException
 from ...models import ACPHoliday, HolidayType
 
 
@@ -48,7 +45,7 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser):
-        #parser.add_argument('optional-argument', nargs='?')
+        # parser.add_argument('optional-argument', nargs='?')
         parser.add_argument('--list-initial',
                             action='store_true',
                             dest='list_initial',

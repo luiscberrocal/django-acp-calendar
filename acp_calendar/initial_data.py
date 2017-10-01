@@ -1,30 +1,33 @@
+import collections
 import json
 import operator
-import os
 from datetime import datetime
+
 from django.conf import settings
 
-import collections
-
+from . import app_settings
 from .exceptions import ACPCalendarException
 
-from . import app_settings
 
+# noinspection PyPep8Naming
 def load_data(apps, schema_editor):
     HolidayType = apps.get_model("acp_calendar", "HolidayType")
     for holiday_type in get_holiday_type_list():
         HolidayType.objects.create(**holiday_type)
 
+    # noinspection PyPep8Naming
     ACPHoliday = apps.get_model("acp_calendar", "ACPHoliday")
     for holiday_data in get_holidays_list():
         try:
             holiday_type = HolidayType.objects.get(short_name=holiday_data['holiday_type'])
+            # noinspection PyUnresolvedReferences
             holiday_date = datetime.strptime(holiday_data['date'], app_settings.LOAD_DATE_FORMAT)
-            ACPHoliday.objects.create(date=holiday_date, holiday_type=holiday_type )
+            ACPHoliday.objects.create(date=holiday_date, holiday_type=holiday_type)
         except HolidayType.DoesNotExist:
             raise ACPCalendarException('Could not find a holiday type for %s' % holiday_data['holiday_type'])
 
 
+# noinspection SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection
 def get_holiday_type_list():
     holiday_types = [{'name': 'Año Nuevo', 'short_name': 'año_nuevo'},
                      {'name': 'Día de los Mártires', 'short_name': 'mártires'},
@@ -58,7 +61,7 @@ def get_key(object):
     return object['date']
 
 
-def get_holidays_list(source_json_file = None):
+def get_holidays_list(source_json_file=None):
     if source_json_file is None:
         data_filename = app_settings.INITIAL_DATA_FILENAME
     elif source_json_file is not None and settings.DEBUG:
