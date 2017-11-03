@@ -16,6 +16,7 @@ from acp_calendar import __version__ as version_num
 
 urlpatterns = [url(r'^calendar/', include('acp_calendar.urls', namespace='calendar')), ]
 
+
 @override_settings(ROOT_URLCONF=__name__)
 class TestHomeView(TestCase):
 
@@ -37,6 +38,25 @@ class TestHomeView(TestCase):
         url = reverse('calendar:home')
         response = self.client.post(url, data={'check_initial_data': 'Check Initial Data'})
         self.assertEqual(0, len(response.context['not_found']))
+
+
+@override_settings(ROOT_URLCONF=__name__)
+class TestACPHolidayView(TestCase):
+
+    def test_get_list(self):
+        url = reverse('calendar:list')
+        response = self.client.get(url)
+        self.assertEqual('2006-01-01', response.context['acpholiday_list'].first().date.strftime('%Y-%m-%d'))
+        self.assertEqual('2017-12-25', response.context['acpholiday_list'].last().date.strftime('%Y-%m-%d'))
+        self.assertEqual(10, response.context['acpholiday_list'].count())
+
+    def test_get_list_per_year(self):
+        url = reverse('calendar:list-year', kwargs={'year': 2016})
+        response = self.client.get(url)
+        self.assertEqual('2016-01-01', response.context['acpholiday_list'].first().date.strftime('%Y-%m-%d'))
+        self.assertEqual('2016-12-26', response.context['acpholiday_list'].last().date.strftime('%Y-%m-%d'))
+        self.assertEqual(10, response.context['acpholiday_list'].count())
+
 
 
 class TestACPHolidayListAPIView(TestCase):
@@ -104,7 +124,7 @@ class TestCalendarCalculationsView(TestCase):
         response = self.client.get('/api/working-month/{year}/{month}/'.format(**result))
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
-
+@override_settings(ROOT_URLCONF=__name__)
 class TestCalendarView(TestCase):
 
     version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
@@ -115,7 +135,7 @@ class TestCalendarView(TestCase):
         aware_datetime = time_zone.localize(datetime(2016, 10, 23, 20, 0), is_dst=None)
         timezone_now_date.return_value = aware_datetime
 
-        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': 2017})
+        url = reverse('calendar:fiscal-year-calendar', kwargs={'fiscal_year': 2017})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
         self.assertRegex(response.context['version'], self.version_regex)
@@ -129,7 +149,7 @@ class TestCalendarView(TestCase):
         self.assertEqual(21, months[0]['working_days'])
 
     def test_get_previous(self):
-        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': 2016})
+        url = reverse('calendar:fiscal-year-calendar', kwargs={'fiscal_year': 2016})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
         self.assertRegex(response.context['version'], self.version_regex)
@@ -146,7 +166,7 @@ class TestCalendarView(TestCase):
         last_holiday = ACPHoliday.objects.last()
         fiscal_year = FiscalYear.create_from_date(last_holiday.date)
         year = fiscal_year.year + 1
-        url = reverse('fiscal-year-calendar', kwargs={'fiscal_year': year})
+        url = reverse('calendar:fiscal-year-calendar', kwargs={'fiscal_year': year})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
         self.assertRegex(response.context['version'], self.version_regex)
@@ -154,12 +174,13 @@ class TestCalendarView(TestCase):
         self.assertEqual('End date exceed the last registered holiday', response.context['errors'])
 
 
+@override_settings(ROOT_URLCONF=__name__)
 class TestCalulatorView(TestCase):
 
     version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
 
     def test_get(self):
-        url = reverse('calculator')
+        url = reverse('calendar:calculator')
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
         self.assertTrue(isinstance(response.context[-1]['form'], CalculatorForm))
@@ -167,7 +188,7 @@ class TestCalulatorView(TestCase):
 
     def test_post(self):
         data = {'start_date': '2016-01-01', 'end_date': '2016-02-25'}
-        url = reverse('calculator')
+        url = reverse('calendar:calculator')
         response = self.client.post(url, data=data)
         self.assertEqual(200, response.status_code)
         self.assertEqual(37, response.context[-1]['working_days'])
@@ -175,7 +196,7 @@ class TestCalulatorView(TestCase):
 
     def test_post_wrong_dates(self):
         data = {'start_date': '2016-01-01', 'end_date': '2015-02-25'}
-        url = reverse('calculator')
+        url = reverse('calendar:calculator')
         response = self.client.post(url, data=data)
         self.assertEqual(200, response.status_code)
         self.assertEqual(None, response.context[-1]['working_days'])
@@ -185,7 +206,7 @@ class TestCalulatorView(TestCase):
 
     def test_post_invalid_form(self):
         data = {'start_date': '2016-01-01', 'end_date': 'hjudas'}
-        url = reverse('calculator')
+        url = reverse('calendar:calculator')
         response = self.client.post(url, data=data)
         self.assertEqual(200, response.status_code)
         self.assertEqual(None, response.context[-1]['working_days'])
