@@ -141,9 +141,17 @@ class TestCalendarCalculationsView(TestCase):
         response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
-    def test_working_month_error(self):
+    def test_working_month_wrong_month(self):
         data = {"year": "2016", "month": "13"}
         extra = {"days": '-1', 'error': 'bad month number 13; must be 1-12'}
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_month', kwargs=data)
+        response = self.client.get(url)
+        self.assertEqual(result, json.loads(response.content.decode('utf-8')))
+
+    def test_working_month_wrong_year(self):
+        data = {"year": "1900", "month": "12"}
+        extra = {"days": '-1', 'error': 'Start date precedes the first registered holiday'}
         result = {**data, **extra}
         url = reverse('calendar:calendar-api:working_month', kwargs=data)
         response = self.client.get(url)
