@@ -53,9 +53,10 @@ class TestACPHolidayView(TestCase):
     def test_get_list_per_year(self):
         url = reverse('calendar:list-year', kwargs={'year': 2016})
         response = self.client.get(url)
-        self.assertEqual('2016-01-01', response.context['acpholiday_list'].first().date.strftime('%Y-%m-%d'))
-        self.assertEqual('2016-12-26', response.context['acpholiday_list'].last().date.strftime('%Y-%m-%d'))
-        self.assertEqual(10, response.context['acpholiday_list'].count())
+        self.assertEqual(response.context['year'], '2016')
+        self.assertEqual(response.context['acpholiday_list'].first().date.strftime('%Y-%m-%d'), '2016-01-01')
+        self.assertEqual(response.context['acpholiday_list'].last().date.strftime('%Y-%m-%d'), '2016-12-26')
+        self.assertEqual(response.context['acpholiday_list'].count(), 10)
 
 
 

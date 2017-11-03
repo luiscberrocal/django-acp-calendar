@@ -119,6 +119,12 @@ class ACPHolidayListView(ListView):
     model = ACPHoliday
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super(ACPHolidayListView, self).get_context_data(**kwargs)
+        if self.kwargs.get('year'):
+            context['year'] = self.kwargs.get('year')
+        return context
+
     def get_queryset(self):
         qs = super(ACPHolidayListView, self).get_queryset()
         if self.kwargs.get('year'):
