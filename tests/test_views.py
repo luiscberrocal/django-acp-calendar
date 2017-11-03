@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
 import django
 import pytz
@@ -10,16 +10,15 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test import override_settings
 
+from acp_calendar import __version__ as version_num
 from acp_calendar.forms import CalculatorForm
 from acp_calendar.models import ACPHoliday, FiscalYear
-from acp_calendar import __version__ as version_num
 
 urlpatterns = [url(r'^calendar/', include('acp_calendar.urls', namespace='calendar')), ]
 
 
 @override_settings(ROOT_URLCONF=__name__)
 class TestHomeView(TestCase):
-
     def test_get(self):
         url = reverse('calendar:home')
         response = self.client.get(url)
@@ -42,7 +41,6 @@ class TestHomeView(TestCase):
 
 @override_settings(ROOT_URLCONF=__name__)
 class TestACPHolidayView(TestCase):
-
     def test_get_list(self):
         url = reverse('calendar:list')
         response = self.client.get(url)
@@ -59,11 +57,11 @@ class TestACPHolidayView(TestCase):
         self.assertEqual(response.context['acpholiday_list'].count(), 10)
 
 
-
+@override_settings(ROOT_URLCONF=__name__)
 class TestACPHolidayListAPIView(TestCase):
-
     def test_get(self):
-        response = self.client.get('/api/holiday-list/')
+        url = reverse('calendar:calendar-api:holiday-list')
+        response = self.client.get(url)
         data = json.loads(response.content.decode('utf-8'))
         results = data['results']
         self.assertEqual(20, len(results))
@@ -71,7 +69,8 @@ class TestACPHolidayListAPIView(TestCase):
         self.assertEqual('2006-01-01', results[0]['date'])
 
     def test_get_year(self):
-        response = self.client.get('/api/holiday-list/2013/')
+        url = reverse('calendar:calendar-api:holiday-list-year', kwargs={'year': 2013})
+        response = self.client.get(url)
         data = json.loads(response.content.decode('utf-8'))
         results = data['results']
         self.assertEqual(11, len(results))
@@ -79,55 +78,80 @@ class TestACPHolidayListAPIView(TestCase):
         self.assertEqual('2013-01-01', results[0]['date'])
 
 
+@override_settings(ROOT_URLCONF=__name__)
 class TestCalendarCalculationsView(TestCase):
-
-    def test_get(self):
-        result = {"start_date": "2016-01-01", "end_date": "2016-01-31", "days": '19'}
-        response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
+    def test_working_days(self):
+        result = {"start_date": "2016-01-01", "end_date": "2016-01-31"}
+        url = reverse('calendar:calendar-api:working_days', kwargs=result)
+        response = self.client.get(url)
+        result['days'] = '19'
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_error_invalid_date(self):
-        result = {"start_date": "2006-13-07", "end_date": "2006-01-31", "days": '-1',
-                  'error': "time data '2006-13-07' does not match format '%Y-%m-%d'"}
-        response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
+        data = {"start_date": "2006-13-07", "end_date": "2006-01-31"}
+        extra = {"days": '-1',
+                 'error': "time data '2006-13-07' does not match format '%Y-%m-%d'"}
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_days', kwargs=data)
+        response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_error_start_date(self):
-        result = {"start_date": "2005-12-31", "end_date": "2006-01-31", "days": '-1',
-                  'error': 'Start date precedes the first registered holiday'}
-        response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
+        data = {"start_date": "2005-12-31", "end_date": "2006-01-31"}
+        extra = {"days": '-1',
+                 'error': 'Start date precedes the first registered holiday'}
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_days', kwargs=data)
+        response = self.client.get(url)
+
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_error_end_date(self):
-        result = {"start_date": "2017-01-07", "end_date": "2018-12-31", "days": '-1',
-                  'error': 'End date exceed the last registered holiday'}
-        response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
+        data = {"start_date": "2017-01-07", "end_date": "2019-12-31"}
+        extra = {"days": '-1',
+                              'error': 'End date exceed the last registered holiday'}
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_days', kwargs=data)
+        response = self.client.get(url)
+
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_error_start_greater_than_end(self):
-        result = {"start_date": "2016-01-07", "end_date": "2015-12-31", "days": '-1',
+        data = {"start_date": "2016-01-07", "end_date": "2015-12-31"}
+        extra = {"days": '-1',
                   'error': 'Start date cannot occur after end date'}
-        response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_days', kwargs=data)
+        response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_working_delta(self):
-        result = {"start_date": "2016-01-01", "end_date": "2016-01-11", "days": '5'}
-        response = self.client.get('/api/working-delta/{start_date}/{days}/'.format(**result))
+        data = {"start_date": "2016-01-01", "end_date": "2016-01-11"}
+        extra = {"days": '5'}
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_days', kwargs=data)
+        response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_working_month(self):
-        result = {"year": "2016", "month": "3", "days": '22'}
-        response = self.client.get('/api/working-month/{year}/{month}/'.format(**result))
+        data = {"year": "2016", "month": "3"}
+        extra = {"days": '22'}
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_month', kwargs=data)
+        response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_working_month_error(self):
-        result = {"year": "2016", "month": "13", "days": '-1', 'error': 'bad month number 13; must be 1-12'}
-        response = self.client.get('/api/working-month/{year}/{month}/'.format(**result))
+        data = {"year": "2016", "month": "13"}
+        extra = {"days": '-1', 'error': 'bad month number 13; must be 1-12'}
+        result = {**data, **extra}
+        url = reverse('calendar:calendar-api:working_month', kwargs=data)
+        response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
+
 
 @override_settings(ROOT_URLCONF=__name__)
 class TestCalendarView(TestCase):
-
     version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
 
     @patch('django.utils.timezone.now')
@@ -162,7 +186,6 @@ class TestCalendarView(TestCase):
         self.assertEqual(2015, months[0]['year'])
         self.assertEqual(22, months[0]['working_days'])
 
-
     def test_get_with_errors(self):
         last_holiday = ACPHoliday.objects.last()
         fiscal_year = FiscalYear.create_from_date(last_holiday.date)
@@ -177,7 +200,6 @@ class TestCalendarView(TestCase):
 
 @override_settings(ROOT_URLCONF=__name__)
 class TestCalulatorView(TestCase):
-
     version_regex = r'\d{1,2}\.\d{1,2}\.\d{1,5}'
 
     def test_get(self):
@@ -214,7 +236,6 @@ class TestCalulatorView(TestCase):
         self.assertRegex(response.context['version'], self.version_regex)
         self.assertEqual('Enter a valid date.', response.context['form'].errors['end_date'][0])
 
-
     def assert_message_count(self, response, expect_num):
         """
         Asserts that exactly the given number of messages have been sent.
@@ -227,7 +248,7 @@ class TestCalulatorView(TestCase):
 
         if actual_num != expect_num:
             self.fail('Message count was %d, expected %d' %
-                (actual_num, expect_num))
+                      (actual_num, expect_num))
 
     def assert_message_contains(self, response, text, level=None):
         """
@@ -245,14 +266,14 @@ class TestCalulatorView(TestCase):
             msg = matches[0]
             if level is not None and msg.level != level:
                 self.fail('There was one matching message but with different'
-                    'level: %s != %s' % (msg.level, level))
+                          'level: %s != %s' % (msg.level, level))
 
             return
 
         elif len(matches) == 0:
             messages_str = ", ".join('"%s"' % m for m in messages)
             self.fail('No message contained text "%s", messages were: %s' %
-                (text, messages_str))
+                      (text, messages_str))
         else:
             self.fail('Multiple messages contained text "%s": %s' %
-                (text, ", ".join(('"%s"' % m) for m in matches)))
+                      (text, ", ".join(('"%s"' % m) for m in matches)))
