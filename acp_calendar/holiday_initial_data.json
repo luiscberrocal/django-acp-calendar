@@ -530,5 +530,49 @@
   {
     "date": "2017-12-25",
     "holiday_type": "navidad"
+  },
+  {
+    "date": "2018-01-01",
+    "holiday_type": "año_nuevo"
+  },
+  {
+    "date": "2018-01-09",
+    "holiday_type": "mártires"
+  },
+  {
+    "date": "2018-02-13",
+    "holiday_type": "martes_carnaval"
+  },
+  {
+    "date": "2018-03-30",
+    "holiday_type": "viernes_santo"
+  },
+  {
+    "date": "2018-05-01",
+    "holiday_type": "día_del_trabajo"
+  },
+  {
+    "date": "2018-11-02",
+    "holiday_type": "separación_colombia"
+  },
+  {
+    "date": "2018-11-05",
+    "holiday_type": "colón"
+  },
+  {
+    "date": "2018-11-09",
+    "holiday_type": "grito_independencia"
+  },
+  {
+    "date": "2018-11-26",
+    "holiday_type": "independencia_españa"
+  },
+  {
+    "date": "2018-12-07",
+    "holiday_type": "día_de_la_madre"
+  },
+  {
+    "date": "2018-12-25",
+    "holiday_type": "navidad"
   }
 ]
