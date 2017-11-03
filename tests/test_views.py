@@ -24,15 +24,15 @@ class TestHomeView(TestCase):
         url = reverse('calendar:home')
         response = self.client.get(url)
         self.assertEqual('2006-01-01', response.context['first_holiday'].date.strftime('%Y-%m-%d'))
-        self.assertEqual('2017-12-25', response.context['last_holiday'].date.strftime('%Y-%m-%d'))
-        self.assertEqual(133, response.context['holiday_count'])
+        self.assertEqual('2018-12-25', response.context['last_holiday'].date.strftime('%Y-%m-%d'))
+        self.assertEqual(144, response.context['holiday_count'])
         self.assertEqual(version_num, response.context['version'])
         self.assertEqual(0, len(response.context['years']))
 
     def test_post_update_fiscal_year(self):
         url = reverse('calendar:home')
         response = self.client.post(url, data={'update_fiscal_year': 'Update Fiscal Year'})
-        self.assertEqual(13, len(response.context['years']))
+        self.assertEqual(14, len(response.context['years']))
 
     def test_check_initial_data(self):
         url = reverse('calendar:home')
@@ -47,7 +47,7 @@ class TestACPHolidayView(TestCase):
         url = reverse('calendar:list')
         response = self.client.get(url)
         self.assertEqual('2006-01-01', response.context['acpholiday_list'].first().date.strftime('%Y-%m-%d'))
-        self.assertEqual('2017-12-25', response.context['acpholiday_list'].last().date.strftime('%Y-%m-%d'))
+        self.assertEqual('2018-12-25', response.context['acpholiday_list'].last().date.strftime('%Y-%m-%d'))
         self.assertEqual(10, response.context['acpholiday_list'].count())
 
     def test_get_list_per_year(self):
@@ -67,7 +67,7 @@ class TestACPHolidayListAPIView(TestCase):
         data = json.loads(response.content.decode('utf-8'))
         results = data['results']
         self.assertEqual(20, len(results))
-        self.assertEqual(133, data['count'])
+        self.assertEqual(144, data['count'])
         self.assertEqual('2006-01-01', results[0]['date'])
 
     def test_get_year(self):
@@ -99,7 +99,7 @@ class TestCalendarCalculationsView(TestCase):
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
 
     def test_get_error_end_date(self):
-        result = {"start_date": "2017-01-07", "end_date": "2017-12-31", "days": '-1',
+        result = {"start_date": "2017-01-07", "end_date": "2018-12-31", "days": '-1',
                   'error': 'End date exceed the last registered holiday'}
         response = self.client.get('/api/working-days/{start_date}/{end_date}/'.format(**result))
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
