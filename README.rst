@@ -30,11 +30,13 @@ The full documentation is at http://django-acp-calendar.readthedocs.io/.
 Requirements
 =============
 
+As of version 1.7.0 Django 1.8 will no longer be supported due to the fact that the latest Django Restframework version
+does not support it.
 
 Requires
 
     * Python 3.4, 3.5 or 3.6
-    * Django 1.8.15, 1.9.10, 1.10.7 or 1.11
+    * Django 1.9, 1.10 or 1.11.6
 
 
 Quickstart
