@@ -119,9 +119,9 @@ class TestACPHoliday(TestOutputMixin, TestCase):
 
     def test_load_initial(self):
         loaded_holidays = len(get_holidays_list())
-        self.assertEqual(133, ACPHoliday.objects.count())
+        self.assertEqual(144, ACPHoliday.objects.count())
         self.assertEqual(datetime.date(2006, 1,1), ACPHoliday.objects.first().date)
-        self.assertEqual(datetime.date(2017, 12,25), ACPHoliday.objects.last().date)
+        self.assertEqual(datetime.date(2018, 12,25), ACPHoliday.objects.last().date)
 
 
     def test_days_in_range_generator(self):
@@ -212,13 +212,13 @@ class TestACPHoliday(TestOutputMixin, TestCase):
     def test_write_json(self):
         dated_filename = self.get_dated_output_filename('test_write_json.json')
         results = ACPHoliday.objects.all().write_json(dated_filename)
-        self.assertEqual(133, results.count())
+        self.assertEqual(144, results.count())
         self.assertTrue(os.path.exists(dated_filename))
 
         holidays_in_json = get_holidays_list(dated_filename)
         self.assertEqual('2006-01-01', holidays_in_json[0]['date'])
-        self.assertEqual('2017-12-25', holidays_in_json[-1]['date'])
-        self.assertEqual(133, len(holidays_in_json))
+        self.assertEqual('2018-12-25', holidays_in_json[-1]['date'])
+        self.assertEqual(144, len(holidays_in_json))
         #self.clean_output = False
         self.clean_output_folder(dated_filename)
 
@@ -234,7 +234,6 @@ class TestACPHoliday(TestOutputMixin, TestCase):
         self.assertEqual('2014-11-03', holidays_in_json[0]['date'])
         self.assertEqual('2015-05-01', holidays_in_json[-1]['date'])
         self.assertEqual(11, len(holidays_in_json))
-        self.clean_output = False
         self.clean_output_folder(dated_filename)
 
     # def test_filter(self):

@@ -22,7 +22,8 @@ def load_data(apps, schema_editor):
             holiday_type = HolidayType.objects.get(short_name=holiday_data['holiday_type'])
             # noinspection PyUnresolvedReferences
             holiday_date = datetime.strptime(holiday_data['date'], app_settings.LOAD_DATE_FORMAT)
-            ACPHoliday.objects.create(date=holiday_date, holiday_type=holiday_type)
+
+            ACPHoliday.objects.get_or_create(date=holiday_date, holiday_type=holiday_type)
         except HolidayType.DoesNotExist:
             raise ACPCalendarException('Could not find a holiday type for %s' % holiday_data['holiday_type'])
 

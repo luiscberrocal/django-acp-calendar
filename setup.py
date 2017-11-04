@@ -53,7 +53,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'djangorestframework==3.6.4',
+        'djangorestframework==3.7.1',
         'pytz==2017.2',
     ],
     license="BSD",
@@ -63,7 +63,6 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Framework :: Django',
         'Framework :: Django :: 1.9',
-        'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
         'Intended Audience :: Developers',
@@ -71,6 +70,7 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Intended Audience :: Developers',
     ],
 )
