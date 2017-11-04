@@ -91,7 +91,8 @@ class TestCalendarCalculationsView(TestCase):
         data = {"start_date": "2006-13-07", "end_date": "2006-01-31"}
         extra = {"days": '-1',
                  'error': "time data '2006-13-07' does not match format '%Y-%m-%d'"}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_days', kwargs=data)
         response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
@@ -100,7 +101,8 @@ class TestCalendarCalculationsView(TestCase):
         data = {"start_date": "2005-12-31", "end_date": "2006-01-31"}
         extra = {"days": '-1',
                  'error': 'Start date precedes the first registered holiday'}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_days', kwargs=data)
         response = self.client.get(url)
 
@@ -110,7 +112,8 @@ class TestCalendarCalculationsView(TestCase):
         data = {"start_date": "2017-01-07", "end_date": "2019-12-31"}
         extra = {"days": '-1',
                               'error': 'End date exceed the last registered holiday'}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_days', kwargs=data)
         response = self.client.get(url)
 
@@ -120,7 +123,8 @@ class TestCalendarCalculationsView(TestCase):
         data = {"start_date": "2016-01-07", "end_date": "2015-12-31"}
         extra = {"days": '-1',
                   'error': 'Start date cannot occur after end date'}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_days', kwargs=data)
         response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
@@ -128,7 +132,8 @@ class TestCalendarCalculationsView(TestCase):
     def test_get_working_delta(self):
         data = {"start_date": "2016-01-01", "end_date": "2016-01-11"}
         extra = {"days": '5'}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_days', kwargs=data)
         response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
@@ -136,7 +141,8 @@ class TestCalendarCalculationsView(TestCase):
     def test_working_month(self):
         data = {"year": "2016", "month": "3"}
         extra = {"days": '22'}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_month', kwargs=data)
         response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
@@ -144,7 +150,8 @@ class TestCalendarCalculationsView(TestCase):
     def test_working_month_wrong_month(self):
         data = {"year": "2016", "month": "13"}
         extra = {"days": '-1', 'error': 'bad month number 13; must be 1-12'}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_month', kwargs=data)
         response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))
@@ -152,7 +159,8 @@ class TestCalendarCalculationsView(TestCase):
     def test_working_month_wrong_year(self):
         data = {"year": "1900", "month": "12"}
         extra = {"days": '-1', 'error': 'Start date precedes the first registered holiday'}
-        result = {**data, **extra}
+        result = data.copy()
+        result.update(extra)
         url = reverse('calendar:calendar-api:working_month', kwargs=data)
         response = self.client.get(url)
         self.assertEqual(result, json.loads(response.content.decode('utf-8')))

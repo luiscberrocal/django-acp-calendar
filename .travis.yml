@@ -25,5 +25,6 @@ install:
 script: coverage run --source acp_calendar runtests.py
 
 after_success:
+  - pip freeze
   - codecov
   - coveralls
